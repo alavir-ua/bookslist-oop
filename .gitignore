@@ -1,0 +1,4 @@
+.idea
+.git
+config/db_params.php
+config/smtp.php

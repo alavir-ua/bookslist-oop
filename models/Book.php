@@ -7,6 +7,9 @@ class Book
 {
 	// Количество отображаемых товаров по умолчанию
 	const SHOW_BY_DEFAULT = 6;
+
+	// Количество отображаемых товаров в админпанели
+	const SHOW_FOR_ADMIN = 10;
 #----------------------------Главная страница----------------------------------
 
 	//Возвращает массив последних книг
@@ -381,6 +384,66 @@ WHERE b_status = 1 AND a_id = :author_id';
 	}
 
 #-----------------------------------------------------------------------------
+
+   //Возвращает массив всех книг
+	public static function getAllBooksLimit($page=1)
+	{
+		$limit = Book::SHOW_FOR_ADMIN;
+		// Смещение (для запроса)
+		$offset = ($page - 1) * self::SHOW_BY_DEFAULT;
+
+		// Соединение с БД
+		$db = Db::getConnection();
+
+		$sql = 'SELECT 
+        b_id  AS id,
+        b_code  AS code,
+        b_name  AS name,
+        b_price  AS price,
+        b_is_new  AS is_new,
+        b_is_recommended  AS is_recommended,
+        b_status  AS status,
+		GROUP_CONCAT(DISTINCT a_name ORDER BY a_name)
+		AS authors,
+        GROUP_CONCAT(DISTINCT g_name ORDER BY g_name)
+		AS genres
+		FROM books
+JOIN m2m_books_authors USING (b_id)
+JOIN authors USING (a_id)
+JOIN m2m_books_genres USING (b_id)
+JOIN genres USING (g_id)
+GROUP BY b_id
+ORDER BY b_id DESC
+LIMIT :limit 
+OFFSET :offset';
+
+		// Используется подготовленный запрос
+		$result = $db->prepare($sql);
+		$result->bindParam(':limit', $limit, PDO::PARAM_INT);
+		$result->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+		// Выполнение команды
+		$result->execute();
+
+		// Получение и возврат результатов
+		$i = 0;
+		$allBooks = array();
+		while ($row = $result->fetch()) {
+			$allBooks[$i]['id'] = $row['id'];
+			$allBooks[$i]['code'] = $row['code'];
+			$allBooks[$i]['name'] = $row['name'];
+			$allBooks[$i]['price'] = $row['price'];
+			$allBooks[$i]['authors'] = $row['authors'];
+			$allBooks[$i]['genres'] = $row['genres'];
+			$allBooks[$i]['is_new'] = $row['is_new'];
+			$allBooks[$i]['is_recommended'] = $row['is_recommended'];
+			$allBooks[$i]['status'] = $row['status'];
+			$i++;
+		}
+		return $allBooks;
+	}
+
+
 
 
 

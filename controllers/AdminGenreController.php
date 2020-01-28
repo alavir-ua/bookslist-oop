@@ -4,7 +4,7 @@
  * Контроллер AdminGenreController
  * Управление категориями товаров в админпанели
  */
-class AdminGenreController extends AdminBase
+class AdminGenreController
 {
 
     /**

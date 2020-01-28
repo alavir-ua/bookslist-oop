@@ -72,9 +72,10 @@
                                 <div class="mainmenu pull-left">
                                     <ul class="nav navbar-nav collapse navbar-collapse">
                                         <li><a href="/">Главная</a></li>
-                                        <li><a href="/catalog/">Каталог</a></li>
-                                        <li><a href="/about/">О магазине</a></li>
-                                        <li><a href="/contacts/">Контакты</a></li>
+                                        <li><a href="/catalog">Каталог</a></li>
+                                        <li><a href="/about">О магазине</a></li>
+                                        <li><a href="/contacts">Контакты</a></li>
+                                        <li><a href="/admin">Админпанель</a></li>
                                     </ul>
                                 </div>
                             </div>

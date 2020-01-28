@@ -4,22 +4,25 @@
  * Контроллер AdminBookController
  * Управление товарами в админпанели
  */
-class AdminBookController extends AdminBase
+class AdminBookController
 {
 
     /**
      * Action для страницы "Управление товарами"
      */
-    public function actionIndex()
+    public function actionIndex($page=1)
     {
-        // Проверка доступа
-        self::checkAdmin();
-
         // Получаем список товаров
-        $productsList = Book::getProductsList();
+        $allBooks = Book::getAllBooksLimit($page);
+
+	    // Общее количетсво книг (необходимо для постраничной навигации)
+	    $total = Book::getCountBooks();
+
+	    // Создаем объект Pagination - постраничная навигация
+	    $pagination = new Pagination($total, $page, Book::SHOW_FOR_ADMIN, 'page-');
 
         // Подключаем вид
-        require_once(ROOT . '/views/admin_product/index.php');
+        require_once(ROOT . '/views/admin/admin_book/index.php');
         return true;
     }
 
@@ -28,11 +31,12 @@ class AdminBookController extends AdminBase
      */
     public function actionCreate()
     {
-        // Проверка доступа
-        self::checkAdmin();
 
-        // Получаем список жанров для выпадающего списка
-        $genresList = Genre::getCategoriesListAdmin();
+	    //Получаем список жанров для выпадающего списка
+	    $genres = Genre::getGenresList();
+
+	    //Получаем список авторов для выпадающего списка
+	    $authors = Author::getAuthorsList();
 
         // Обработка формы
         if (isset($_POST['submit'])) {
@@ -77,7 +81,7 @@ class AdminBookController extends AdminBase
         }
 
         // Подключаем вид
-        require_once(ROOT . '/views/admin_product/create.php');
+        require_once(ROOT . '/views/admin/admin_book/create.php');
         return true;
     }
 
@@ -128,7 +132,7 @@ class AdminBookController extends AdminBase
         }
 
         // Подключаем вид
-        require_once(ROOT . '/views/admin_product/update.php');
+        require_once(ROOT . '/views/admin_book/update.php');
         return true;
     }
 
@@ -151,7 +155,7 @@ class AdminBookController extends AdminBase
         }
 
         // Подключаем вид
-        require_once(ROOT . '/views/admin_product/delete.php');
+        require_once(ROOT . '/views/admin_book/delete.php');
         return true;
     }
 

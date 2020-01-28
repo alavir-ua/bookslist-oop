@@ -20,50 +20,36 @@ return array(
 	'order/([0-9]+)' => 'order/index/$1', // actionIndex в OrderController
 	'order/checkout' => 'order/checkout', // actionCheckout в OrderController
 
+    // Управление книгами:
+    'admin/book/create' => 'adminBook/create', // actionCreate в AdminBookController
 
-
-	'order/delete/([0-9]+)' => 'order/delete/$1', // actionDelete в OrderController
-	'order/add/([0-9]+)' => 'order/add/$1', // actionAdd в OrderController
-	'order/addAjax/([0-9]+)' => 'order/addAjax/$1', // actionAddAjax в OrderController
-//	'order' => 'order/index', // actionIndex в OrderController
-
-
-
-
-	'category/page-([0-9]+)' => 'catalog/category/$1', // actionCategory в CatalogController
-
-
-
-
-
-
-    // Пользователь:
-    'user/register' => 'user/register',
-    'user/login' => 'user/login',
-    'user/logout' => 'user/logout',
-    'cabinet/edit' => 'cabinet/edit',
-    'cabinet' => 'cabinet/index',
-    // Управление товарами:
-    'admin/book/create' => 'adminProduct/create',
     'admin/book/update/([0-9]+)' => 'adminProduct/update/$1',
     'admin/book/delete/([0-9]+)' => 'adminProduct/delete/$1',
-    'admin/book' => 'adminProduct/index',
+
+	'admin/book/page-([0-9]+)' => 'adminBook/index/$1', // actionIndex в AdminBookController
+    'admin/book' => 'adminBook/index', // actionIndex в AdminBookController
+
+
     // Управление категориями:
     'admin/genre/create' => 'adminGenre/create',
     'admin/genre/update/([0-9]+)' => 'adminGenre/update/$1',
     'admin/genre/delete/([0-9]+)' => 'adminGenre/delete/$1',
     'admin/genre' => 'adminGenre/index',
+
     // Управление заказами:
     'admin/order/update/([0-9]+)' => 'adminOrder/update/$1',
     'admin/order/delete/([0-9]+)' => 'adminOrder/delete/$1',
     'admin/order/view/([0-9]+)' => 'adminOrder/view/$1',
     'admin/order' => 'adminOrder/index',
+
     // Админпанель:
     'admin' => 'admin/index',
     // О магазине
+
     'contacts' => 'site/contact',
     'about' => 'site/about',
     // Главная страница
+
     'index.php' => 'site/index', // actionIndex в SiteController
     '' => 'site/index', // actionIndex в SiteController
 );

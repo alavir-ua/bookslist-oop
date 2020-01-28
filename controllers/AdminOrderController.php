@@ -4,7 +4,7 @@
  * Контроллер AdminOrderController
  * Управление заказами в админпанели
  */
-class AdminOrderController extends AdminBase
+class AdminOrderController
 {
 
     /**
