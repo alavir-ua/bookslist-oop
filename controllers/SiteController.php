@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Контроллер CartController
+ * Контроллер OrderController
  */
 class SiteController
 {
@@ -11,13 +11,16 @@ class SiteController
      */
     public function actionIndex()
     {
-        // Список категорий для левого меню
+        // Список жанров для левого меню
         $genres = Genre::getGenresList();
 
-        // Список последних товаров
+	    // Список авторов для левого меню
+	    $authors = Author::getAuthorsList();
+
+        // Список последних книг
         $latestBooks = Book::getLatestBooks(6);
 
-        // Список товаров для слайдера
+        // Список книг для слайдера
         $sliderBooks = Book::getRecommendedBooks();
 
         // Подключаем вид

@@ -6,17 +6,25 @@
  */
 class CatalogController
 {
-
     /**
-     * Action для страницы "Каталог товаров"
+     * Action для страницы "Каталог"
      */
-    public function actionIndex()
+    public function actionIndex($page=1)
     {
-        // Список категорий для левого меню
-        $categories = Genre::getCategoriesList();
+	    // Список категорий для левого меню
+	    $genres = Genre::getGenresList();
 
-        // Список последних товаров
-        $latestProducts = Product::getLatestProducts(12);
+	    // Список авторов для левого меню
+	    $authors = Author::getAuthorsList();
+
+	    // Массив книг страницы в каталоге
+	    $booksList = Book::getBooksLimit($page);
+
+	    // Общее количетсво книг (необходимо для постраничной навигации)
+	    $total = Book::getCountBooks();
+
+	    // Создаем объект Pagination - постраничная навигация
+	    $pagination = new Pagination($total, $page, Book::SHOW_BY_DEFAULT, 'page-');
 
         // Подключаем вид
         require_once(ROOT . '/views/catalog/index.php');
@@ -24,25 +32,52 @@ class CatalogController
     }
 
     /**
-     * Action для страницы "Категория товаров"
+     * Action для страницы "Каталог по автору"
      */
-    public function actionCategory($categoryId, $page = 1)
+    public function actionGenre($genreId, $page=1)
     {
-        // Список категорий для левого меню
-        $categories = Genre::getCategoriesList();
+	    // Список категорий для левого меню
+	    $genres = Genre::getGenresList();
 
-        // Список товаров в категории
-        $categoryProducts = Product::getProductsListByCategory($categoryId, $page);
+	    //Список авторов для левого меню
+	    $authors = Author::getAuthorsList();
 
-        // Общее количетсво товаров (необходимо для постраничной навигации)
-        $total = Product::getTotalProductsInCategory($categoryId);
+        //Массив книг книг жанра для страницы (пагинация)
+        $genreBooks = Book::getBooksLimitByGenre($genreId);
+
+        // Общее количетсво книг жанра (пагинация)
+        $total = Book::getCountBooksInGenre($genreId);
 
         // Создаем объект Pagination - постраничная навигация
-        $pagination = new Pagination($total, $page, Product::SHOW_BY_DEFAULT, 'page-');
+        $pagination = new Pagination($total, $page, Book::SHOW_BY_DEFAULT, 'page-');
 
         // Подключаем вид
-        require_once(ROOT . '/views/catalog/category.php');
+        require_once(ROOT . '/views/catalog/genre.php');
         return true;
     }
 
+	/**
+	 * Action для страницы "Каталог по автору"
+	 */
+	public function actionAuthor($authorId, $page=1)
+	{
+		// Список категорий для левого меню
+		$genres = Genre::getGenresList();
+
+		//Список авторов для левого меню
+		$authors = Author::getAuthorsList();
+
+		//Массив книг книг жанра для страницы (пагинация)
+		$authorBooks = Book::getBooksLimitByAuthor($authorId);
+
+		// Общее количетсво книг жанра (пагинация)
+		$total = Book::getCountBooksByAuthor($authorId);
+
+		// Создаем объект Pagination - постраничная навигация
+		$pagination = new Pagination($total, $page, Book::SHOW_BY_DEFAULT, 'page-');
+
+		// Подключаем вид
+		require_once(ROOT . '/views/catalog/author.php');
+		return true;
+	}
 }

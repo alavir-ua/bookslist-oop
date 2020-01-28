@@ -9,7 +9,7 @@ class Router
 
     /**
      * Свойство для хранения массива роутов
-     * @var array 
+     * @var array
      */
     private $routes;
 
@@ -74,7 +74,7 @@ class Router
                 // Создать объект, вызвать метод (т.е. action)
                 $controllerObject = new $controllerName;
 
-                /* Вызываем необходимый метод ($actionName) у определенного 
+                /* Вызываем необходимый метод ($actionName) у определенного
                  * класса ($controllerObject) с заданными ($parameters) параметрами
                  */
                 $result = call_user_func_array(array($controllerObject, $actionName), $parameters);

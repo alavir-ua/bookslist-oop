@@ -10,20 +10,21 @@ class Genre
      * Возвращает массив категорий для списка на сайте
      * @return array <p>Массив с категориями</p>
      */
+    #done
     public static function getGenresList()
     {
         // Соединение с БД
         $db = Db::getConnection();
 
         // Запрос к БД
-        $result = $db->query('SELECT id, name FROM genre WHERE status = "1" ORDER BY sort_order, name ASC');
+        $result = $db->query('SELECT g_id, g_name FROM genres WHERE g_status = "1" ORDER BY g_sort_order, g_name ASC');
 
         // Получение и возврат результатов
         $i = 0;
         $genresList = array();
         while ($row = $result->fetch()) {
-            $genresList[$i]['id'] = $row['id'];
-            $genresList[$i]['name'] = $row['name'];
+            $genresList[$i]['id'] = $row['g_id'];
+            $genresList[$i]['name'] = $row['g_name'];
             $i++;
         }
         return $genresList;
@@ -40,7 +41,7 @@ class Genre
         $db = Db::getConnection();
 
         // Запрос к БД
-        $result = $db->query('SELECT id, name, sort_order, status FROM genre ORDER BY sort_order ASC');
+        $result = $db->query('SELECT g_id, g_name, g_sort_order, g_status FROM genres ORDER BY g_sort_order ASC');
 
         // Получение и возврат результатов
         $genresList = array();
@@ -66,7 +67,7 @@ class Genre
         $db = Db::getConnection();
 
         // Текст запроса к БД
-        $sql = 'DELETE FROM genre WHERE id = :id';
+        $sql = 'DELETE FROM genres WHERE g_id = :id';
 
         // Получение и возврат результатов. Используется подготовленный запрос
         $result = $db->prepare($sql);
@@ -88,12 +89,12 @@ class Genre
         $db = Db::getConnection();
 
         // Текст запроса к БД
-        $sql = "UPDATE genre
+        $sql = "UPDATE genres
             SET 
-                name = :name, 
-                sort_order = :sort_order, 
-                status = :status
-            WHERE id = :id";
+                g_name = :name, 
+                g_sort_order = :sort_order, 
+                g_status = :status
+            WHERE g_id = :id";
 
         // Получение и возврат результатов. Используется подготовленный запрос
         $result = $db->prepare($sql);
@@ -115,7 +116,7 @@ class Genre
         $db = Db::getConnection();
 
         // Текст запроса к БД
-        $sql = 'SELECT * FROM genre WHERE id = :id';
+        $sql = 'SELECT * FROM genres WHERE g_id = :id';
 
         // Используется подготовленный запрос
         $result = $db->prepare($sql);
@@ -162,7 +163,7 @@ class Genre
         $db = Db::getConnection();
 
         // Текст запроса к БД
-        $sql = 'INSERT INTO genre (name, sort_order, status) '
+        $sql = 'INSERT INTO genres (g_name, g_sort_order, g_status) '
                 . 'VALUES (:name, :sort_order, :status)';
 
         // Получение и возврат результатов. Используется подготовленный запрос
