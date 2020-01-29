@@ -511,7 +511,7 @@ OFFSET :offset';
 			$book_id = $db->lastInsertId();
 
 			//Запись в таблицу authors
-			foreach ($options['authors'] as $author_id){
+			foreach ($options['authors'] as $author_id) {
 				$sql_2 = 'INSERT INTO m2m_books_authors '
 					. '(a_id, b_id )'
 					. 'VALUE                 '
@@ -564,9 +564,9 @@ OFFSET :offset';
 	}
 
 	/**
-	 * Редактирует товар с заданным id
-	 * @param integer $id <p>id товара</p>
-	 * @param array $options <p>Массив с информацей о товаре</p>
+	 * Редактирует книгу с заданным id
+	 * @param integer $id <p>id книги</p>
+	 * @param array $options <p>Массив с информацей о книге с формы</p>
 	 * @return boolean <p>Результат выполнения метода</p>
 	 */
 	public static function updateBookById($id, $options)
@@ -575,28 +575,71 @@ OFFSET :offset';
 		$db = Db::getConnection();
 
 		// Текст запроса к БД
-		$sql = "UPDATE books
+		$sql_1 = 'UPDATE books
             SET
-                b_name = :title,
+                b_code = :code,
+                b_name = :name,
                 b_price = :price,
-                genre_id = :genre_id,
                 b_description = :description,
                 b_is_new = :is_new,
                 b_is_recommended = :is_recommended,
                 b_status = :status
-            WHERE b_id = :id";
+            WHERE b_id = :id';
 
 		// Получение и возврат результатов. Используется подготовленный запрос
-		$result = $db->prepare($sql);
-		$result->bindParam(':id', $id, PDO::PARAM_INT);
-		$result->bindParam(':title', $options['title'], PDO::PARAM_STR);
-		$result->bindParam(':price', $options['price'], PDO::PARAM_STR);
-		$result->bindParam(':genre_id', $options['genre_id'], PDO::PARAM_INT);
-		$result->bindParam(':description', $options['description'], PDO::PARAM_STR);
-		$result->bindParam(':is_new', $options['is_new'], PDO::PARAM_INT);
-		$result->bindParam(':is_recommended', $options['is_recommended'], PDO::PARAM_INT);
-		$result->bindParam(':status', $options['status'], PDO::PARAM_INT);
-		return $result->execute();
+		$result_1 = $db->prepare($sql_1);
+		$result_1->bindParam(':id', $id, PDO::PARAM_INT);
+		$result_1->bindParam(':code', $options['code'], PDO::PARAM_STR);
+		$result_1->bindParam(':name', $options['name'], PDO::PARAM_STR);
+		$result_1->bindParam(':price', $options['price'], PDO::PARAM_STR);
+		$result_1->bindParam(':description', $options['description'], PDO::PARAM_STR);
+		$result_1->bindParam(':is_new', $options['is_new'], PDO::PARAM_INT);
+		$result_1->bindParam(':is_recommended', $options['is_recommended'], PDO::PARAM_INT);
+		$result_1->bindParam(':status', $options['status'], PDO::PARAM_INT);
+
+		if ($result_1->execute()) {
+			// Удаление c связей книги с таблицы authors
+			$sql_2 = 'DELETE FROM m2m_books_authors WHERE b_id = :id';
+			$result_2 = $db->prepare($sql_2);
+			$result_2->bindParam(':id', $id, PDO::PARAM_INT);
+			$result_2->execute();
+
+			// Удаление c связей книги с таблицы genres
+			$sql_3 = 'DELETE FROM m2m_books_genres WHERE b_id = :id';
+			$result_3 = $db->prepare($sql_3);
+			$result_3->bindParam(':id', $id, PDO::PARAM_INT);
+			$result_3->execute();
+
+			//Запись в таблицу authors
+			foreach ($options['authors'] as $author_id) {
+				$sql_2 = 'INSERT INTO m2m_books_authors '
+					. '(a_id, b_id )'
+					. 'VALUE                 '
+					. '(:author_id, :book_id)';
+				// Получение и возврат результатов. Используется подготовленный запрос
+				$result_2 = $db->prepare($sql_2);
+				$result_2->bindParam(':author_id', $author_id, PDO::PARAM_STR);
+				$result_2->bindParam(':book_id', $id, PDO::PARAM_STR);
+				$result_2->execute();
+			}
+
+			//Запись в таблицу genres
+			foreach ($options['genres'] as $genre_id) {
+				$sql_3 = 'INSERT INTO m2m_books_genres '
+					. '(g_id, b_id )'
+					. 'VALUE                 '
+					. '(:genre_id, :book_id)';
+				// Получение и возврат результатов. Используется подготовленный запрос
+				$result_3 = $db->prepare($sql_3);
+				$result_3->bindParam(':genre_id', $genre_id, PDO::PARAM_STR);
+				$result_3->bindParam(':book_id', $id, PDO::PARAM_STR);
+				$result_3->execute();
+			}
+			// Если запрос выполенен успешно, true
+			return true;
+		}
+		// Иначе возвращаем 0
+		return 0;
 	}
 
 

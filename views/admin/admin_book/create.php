@@ -41,7 +41,7 @@
 
 									<p>Стоимость</p>
 									<input type="text" name="price" placeholder="" value="">
-									<br/><br/>
+									<br/>
 
 								<p>Жанр</p>
 									<select name="genre_id[]" size="3" multiple="multiple">
@@ -72,7 +72,7 @@
 								<div class="col-lg-5">
 
 									<p>Описание</p>
-									<textarea name="description" rows="4"></textarea>
+									<textarea name="description" rows="7"></textarea>
 
 									<br/><br/>
 
@@ -95,7 +95,7 @@
 									<p>Статус</p>
 									<select name="status">
 										<option value="1" selected="selected">Отображается</option>
-										<option value="0">Скрыт</option>
+										<option value="0">Скрыта</option>
 									</select>
 
 									<br/><br/>

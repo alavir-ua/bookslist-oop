@@ -6,7 +6,6 @@
  */
 class AdminBookController
 {
-
 	/**
 	 * Action для страницы "Управление товарами"
 	 */
@@ -27,7 +26,7 @@ class AdminBookController
 	}
 
 	/**
-	 * Action для страницы "Добавить товар"
+	 * Action для страницы "Добавить книгу"
 	 */
 	public function actionCreate()
 	{
@@ -99,57 +98,61 @@ class AdminBookController
 	}
 
 	/**
-	 * Action для страницы "Редактировать товар"
+	 * Action для страницы "Редактировать книгу"
 	 */
 	public function actionUpdate($id)
 	{
+		//Получаем список жанров для выпадающего списка
+		$genres = Genre::getGenresList();
 
+		//Получаем список авторов для выпадающего списка
+		$authors = Author::getAuthorsList();
 
-		// Получаем список категорий для выпадающего списка
-		$categoriesList = Genre::getCategoriesListAdmin();
-
-		// Получаем данные о конкретном заказе
-		$product = Product::getProductById($id);
+		//Получаем запись о книге
+		$book = Book::getBookById($id);
 
 		// Обработка формы
 		if (isset($_POST['submit'])) {
-			// Если форма отправлена
-			// Получаем данные из формы редактирования. При необходимости можно валидировать значения
-			$options['name'] = $_POST['name'];
+			// Если форма отправлена получаем данные из формы
 			$options['code'] = $_POST['code'];
+			$options['name'] = $_POST['name'];
 			$options['price'] = $_POST['price'];
-			$options['category_id'] = $_POST['category_id'];
-			$options['brand'] = $_POST['brand'];
-			$options['availability'] = $_POST['availability'];
 			$options['description'] = $_POST['description'];
+			$options['authors'] = $_POST['author_id'];  //массив ids выбранных авторов
+			$options['genres'] = $_POST['genre_id'];  //массив ids выбранных жанров
 			$options['is_new'] = $_POST['is_new'];
 			$options['is_recommended'] = $_POST['is_recommended'];
 			$options['status'] = $_POST['status'];
 
 			// Сохраняем изменения
-			if (Product::updateProductById($id, $options)) {
+			if (Book::updateBookById($id, $options)) {
 
-
-				// Если запись сохранена
+				// Если запись изменена
 				// Проверим, загружалось ли через форму изображение
 				if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
 
-					// Если загружалось, переместим его в нужную папке, дадим новое имя
-					move_uploaded_file($_FILES["image"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/upload/images/books/{$id}.jpg");
+					//Определяем путь к прежнему изображению
+					$img = ROOT . "/upload/images/books/{$id}.jpg";
+
+					//Если существовало изображение, удаляем его
+					if (file_exists($img)) {
+						unlink($img);
+
+						// Перемещаем загруженное в нужную папку, даем новое имя
+						move_uploaded_file($_FILES["image"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/upload/images/books/{$id}.jpg");
+					}
 				}
+				// Перенаправляем админа на страницу управлениями книгами
+				header("Location: /admin/book");
 			}
-
-			// Перенаправляем пользователя на страницу управлениями товарами
-			header("Location: /admin/book");
 		}
-
 		// Подключаем вид
-		require_once(ROOT . '/views/admin_book/update.php');
+		require_once(ROOT . '/views/admin/admin_book/update.php');
 		return true;
 	}
 
 	/**
-	 * Action для страницы "Удалить товар"
+	 * Action для страницы "Удалить книгу"
 	 */
 	public function actionDelete($id)
 	{
@@ -163,7 +166,7 @@ class AdminBookController
 			$img = ROOT . "/upload/images/books/{$id}.jpg";
 
 			//Если книга удалена и сущ.изображение, удаляем его
-			if(file_exists($img) && $result){
+			if (file_exists($img) && $result) {
 				unlink($img);
 			}
 
