@@ -40,17 +40,8 @@ class OrderController
 		// Список авторов для левого меню
 		$authors = Author::getAuthorsList();
 
-		// Поля для формы
-		$bookCode = false;
-		$bookQuantity = false;
-		$userAddress = false;
-		$userFullName = false;
-		$bookName = false;
-		$bookPrice = false;
-
 		// Статус успешного оформления заказа
 		$result = false;
-
 
 		function test_input($data)
 		{
@@ -74,15 +65,6 @@ class OrderController
 			// Флаг ошибок
 			$errors = false;
 
-			// Валидация полей
-			if (!User::checkFullName($userFullName)) {
-				$errors[] = 'Неправильное имя';
-			}
-
-			if (!User::checkAddress($userAddress)) {
-				$errors[] = 'Неправильный адресс';
-			}
-
 			//Параметры заказа в email
 			$order['code'] = $bookCode;
 			$order['quantity'] = $bookQuantity;
@@ -90,7 +72,23 @@ class OrderController
 			$order['user_name'] = $userFullName;
 			$order['book_name'] = $bookName;
 			$order['book_price'] = $bookPrice;
-			$order['amount'] = $bookPrice * $bookQuantity;
+			if (!isset($order['quantity']) || empty($order['quantity'])) {
+				$order['amount'] = 0;
+			} else {
+				$order['amount'] = $bookPrice * $bookQuantity;
+
+			}
+
+			// При необходимости можно валидировать значения нужным образом
+            if (!isset($order['address']) || empty($order['address'])) {
+	            $errors[] = 'Заполните поле "Ваш адресс"';
+            }
+	        if (!isset($order['user_name']) || empty($order['user_name'])) {
+		        $errors[] = 'Заполните поле "Ваше ФИО"';
+	        }
+	        if (!isset($order['quantity']) || empty($order['quantity'])) {
+		        $errors[] = 'Заполните поле "Количество экземпляров"';
+	        }
 
 			if ($errors == false) {
 				$result = true;
@@ -100,36 +98,11 @@ class OrderController
 			} else {
 				$book['name'] = $bookName;
 				$book['code'] = $bookCode;
+				$book['price'] = $bookPrice;
 			}
 		}
 		require_once(ROOT . '/views/order/index.php');
 		return true;
 	}
-
-
-	/**
-	 * Action для добавления товара в корзину при помощи асинхронного запроса (ajax)
-	 * @param integer $id <p>id товара</p>
-	 */
-	public function actionAddAjax($id)
-	{
-		// Добавляем товар в корзину и печатаем результат: количество товаров в корзине
-		echo Cart::addProduct($id);
-		return true;
-	}
-
-	/**
-	 * Action для добавления товара в корзину синхронным запросом
-	 * @param integer $id <p>id товара</p>
-	 */
-	public function actionDelete($id)
-	{
-		// Удаляем заданный товар из корзины
-		Cart::deleteProduct($id);
-
-		// Возвращаем пользователя в корзину
-		header("Location: /order");
-	}
-
 
 }

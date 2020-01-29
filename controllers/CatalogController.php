@@ -43,7 +43,7 @@ class CatalogController
 	    $authors = Author::getAuthorsList();
 
         //Массив книг книг жанра для страницы (пагинация)
-        $genreBooks = Book::getBooksLimitByGenre($genreId);
+        $genreBooks = Book::getBooksLimitByGenre($genreId, $page);
 
         // Общее количетсво книг жанра (пагинация)
         $total = Book::getCountBooksInGenre($genreId);
@@ -68,7 +68,7 @@ class CatalogController
 		$authors = Author::getAuthorsList();
 
 		//Массив книг книг жанра для страницы (пагинация)
-		$authorBooks = Book::getBooksLimitByAuthor($authorId);
+		$authorBooks = Book::getBooksLimitByAuthor($authorId, $page);
 
 		// Общее количетсво книг жанра (пагинация)
 		$total = Book::getCountBooksByAuthor($authorId);

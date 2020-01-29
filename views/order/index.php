@@ -63,13 +63,14 @@
 									<input type="text" name="book_name" placeholder="<?php echo $book['name']; ?>" value="<?php echo $book['name']; ?>" readonly>
 									<p>Код книги</p>
 									<input type="text" name="book_code" placeholder="<?php echo $book['code']; ?>" value="<?php echo $book['code']; ?>" readonly>
+									<p>Стоимость</p>
+									<input type="text" name="book_price" placeholder="" value="<?php echo $book['price']; ?>" readonly>
 									<p>Ваш адрес</p>
-									<input type="text" name="address" placeholder="" required>
+									<input type="text" name="address" placeholder="">
 									<p>Ваше ФИО</p>
-									<input type="text" name="full_name" placeholder="" required>
+									<input type="text" name="full_name" placeholder="">
 									<p>Количество екземпляров</p>
-									<input type="number" name="book_quant" placeholder="" required>
-									<input type="hidden" name="book_price" placeholder="" value="<?php echo $book['price']; ?>">
+									<input type="number" name="book_quant" placeholder="">
 									<br/>
 									<br/>
 									<input type="submit" name="submit" class="btn btn-default" value="Оформить" />

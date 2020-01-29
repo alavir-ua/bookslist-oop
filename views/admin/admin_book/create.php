@@ -1,4 +1,4 @@
-<?php include ROOT . '/views/layouts/header_admin.php'; ?>
+<?php include ROOT . '/views/admin/layouts/header.php'; ?>
 
 <section>
 	<div class="container">
@@ -22,7 +22,7 @@
 		<?php if (isset($errors) && is_array($errors)): ?>
 					<ul>
 			  <?php foreach ($errors as $error): ?>
-								<li> - <?php echo $error; ?></li>
+								<li style="color: red; font-weight: bold"> - <?php echo $error; ?></li>
 			  <?php endforeach; ?>
 					</ul>
 		<?php endif; ?>
@@ -41,38 +41,38 @@
 
 									<p>Стоимость</p>
 									<input type="text" name="price" placeholder="" value="">
+									<br/><br/>
 
-									<p>Жанр</p>
-									<select name="genre_id">
+								<p>Жанр</p>
+									<select name="genre_id[]" size="3" multiple="multiple">
 					  <?php if (is_array($genres)): ?>
-						  <?php foreach ($genres as $genre): ?>
-													<option value="<?php echo $genre['id']; ?>">
-							  <?php echo $genre['name']; ?>
-													</option>
-						  <?php endforeach; ?>
-					  <?php endif; ?>
+					  <?php foreach ($genres as $genre): ?>
+										<option value="<?php echo $genre['id']; ?>"><?php echo $genre['name']; ?></option>
+			    <?php endforeach; ?>
+		    <?php endif; ?>
 									</select>
 									<br/><br/>
 
 									<p>Автор</p>
-									<select name="author_id">
+									<select name="author_id[]" size="5" multiple="multiple">
 					  <?php if (is_array($authors)): ?>
 						  <?php foreach ($authors as $author): ?>
-													<option value="<?php echo $author['id']; ?>">
-							  <?php echo $author['name']; ?>
-													</option>
+													<option value="<?php echo $author['id']; ?>"><?php echo $author['name']; ?></option>
 						  <?php endforeach; ?>
 					  <?php endif; ?>
 									</select>
 									<br/><br/>
-									<input type="submit" name="submit" class="btn btn-default" value="Сохранить">
-								</div>
-								<div class="col-lg-5">
+
 									<p>Изображение книги</p>
 									<input type="file" name="image" placeholder="" value="">
 
+									<br/><br/>
+									<input type="submit" name="submit" class="btn btn-default checkout" value="Сохранить">
+								</div>
+								<div class="col-lg-5">
+
 									<p>Описание</p>
-									<textarea name="description"></textarea>
+									<textarea name="description" rows="4"></textarea>
 
 									<br/><br/>
 
@@ -106,10 +106,9 @@
 					</form>
 				</div>
 			</div>
-
 		</div>
 	</div>
 </section>
 
-<?php include ROOT . '/views/layouts/footer_admin.php'; ?>
+<?php include ROOT . '/views/admin/layouts/footer.php'; ?>
 

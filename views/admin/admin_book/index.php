@@ -1,4 +1,4 @@
-<?php include ROOT . '/views/layouts/header_admin.php'; ?>
+<?php include ROOT . '/views/admin/layouts/header.php'; ?>
 
 <section>
     <div class="container">
@@ -47,7 +47,7 @@
 	                    <td><?php if($book['status'] == 1){echo 'да';} else {echo 'нет';} ?></td>
                         <td><a href="/admin/book/update/<?php echo $book['id']; ?>" title="Редактировать"><i
 				                        class="fa fa-pencil-square-o"></i></a></td>
-                        <td><a href="/admin/product/delete/<?php echo $book['id']; ?>" title="Удалить"><i class="fa
+                        <td><a href="/admin/book/delete/<?php echo $book['id']; ?>" title="Удалить"><i class="fa
                         fa-times"></i></a></td>
                     </tr>
                 <?php endforeach; ?>
@@ -58,5 +58,5 @@
     </div>
 </section>
 
-<?php include ROOT . '/views/layouts/footer_admin.php'; ?>
+<?php include ROOT . '/views/admin/layouts/footer.php'; ?>
 

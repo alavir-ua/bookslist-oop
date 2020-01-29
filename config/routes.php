@@ -23,8 +23,9 @@ return array(
     // Управление книгами:
     'admin/book/create' => 'adminBook/create', // actionCreate в AdminBookController
 
-    'admin/book/update/([0-9]+)' => 'adminProduct/update/$1',
-    'admin/book/delete/([0-9]+)' => 'adminProduct/delete/$1',
+    'admin/book/update/([0-9]+)' => 'adminBook/update/$1', //actionUpdate в AdminBookController
+
+    'admin/book/delete/([0-9]+)' => 'adminBook/delete/$1', //actionDelete в AdminBookController
 
 	'admin/book/page-([0-9]+)' => 'adminBook/index/$1', // actionIndex в AdminBookController
     'admin/book' => 'adminBook/index', // actionIndex в AdminBookController

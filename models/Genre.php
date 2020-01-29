@@ -17,7 +17,7 @@ class Genre
         $db = Db::getConnection();
 
         // Запрос к БД
-        $result = $db->query('SELECT g_id, g_name FROM genres WHERE g_status = "1" ORDER BY g_sort_order, g_name ASC');
+        $result = $db->query('SELECT g_id, g_name FROM genres WHERE g_status = "1" ORDER BY g_id, g_name ASC');
 
         // Получение и возврат результатов
         $i = 0;

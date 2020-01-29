@@ -6,11 +6,9 @@
  */
 class BookController
 {
-
-    /**
-     * Action для страницы просмотра товара
-     * @param integer $productId <p>id товара</p>
-     */
+	/**
+	 * Action для страницы просмотра книги
+	 */
     public function actionView($bookId)
     {
         // Список категорий для левого меню

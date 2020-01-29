@@ -7,156 +7,166 @@
 class AdminBookController
 {
 
-    /**
-     * Action для страницы "Управление товарами"
-     */
-    public function actionIndex($page=1)
-    {
-        // Получаем список товаров
-        $allBooks = Book::getAllBooksLimit($page);
+	/**
+	 * Action для страницы "Управление товарами"
+	 */
+	public function actionIndex($page = 1)
+	{
+		// Получаем список книг
+		$allBooks = Book::getAdminBooksLimit($page);
 
-	    // Общее количетсво книг (необходимо для постраничной навигации)
-	    $total = Book::getCountBooks();
+		// Общее количетсво книг (необходимо для постраничной навигации)
+		$total = Book::getCountBooks();
 
-	    // Создаем объект Pagination - постраничная навигация
-	    $pagination = new Pagination($total, $page, Book::SHOW_FOR_ADMIN, 'page-');
+		// Создаем объект Pagination - постраничная навигация
+		$pagination = new Pagination($total, $page, Book::SHOW_FOR_ADMIN, 'page-');
 
-        // Подключаем вид
-        require_once(ROOT . '/views/admin/admin_book/index.php');
-        return true;
-    }
+		// Подключаем вид
+		require_once(ROOT . '/views/admin/admin_book/index.php');
+		return true;
+	}
 
-    /**
-     * Action для страницы "Добавить товар"
-     */
-    public function actionCreate()
-    {
+	/**
+	 * Action для страницы "Добавить товар"
+	 */
+	public function actionCreate()
+	{
 
-	    //Получаем список жанров для выпадающего списка
-	    $genres = Genre::getGenresList();
+		//Получаем список жанров для выпадающего списка
+		$genres = Genre::getGenresList();
 
-	    //Получаем список авторов для выпадающего списка
-	    $authors = Author::getAuthorsList();
+		//Получаем список авторов для выпадающего списка
+		$authors = Author::getAuthorsList();
 
-        // Обработка формы
-        if (isset($_POST['submit'])) {
-            // Если форма отправлена
-            // Получаем данные из формы
-            $options['title'] = $_POST['title'];
-            $options['code'] = $_POST['code'];
-            $options['price'] = $_POST['price'];
-            $options['category_id'] = $_POST['category_id'];
-            $options['brand'] = $_POST['brand'];
-            $options['availability'] = $_POST['availability'];
-            $options['description'] = $_POST['description'];
-            $options['is_new'] = $_POST['is_new'];
-            $options['is_recommended'] = $_POST['is_recommended'];
-            $options['status'] = $_POST['status'];
+		// Обработка формы
+		if (isset($_POST['submit'])) {
 
-            // Флаг ошибок в форме
-            $errors = false;
+			// Если форма отправлена получаем данные из формы
+			$options['code'] = $_POST['code'];
+			$options['name'] = $_POST['name'];
+			$options['price'] = $_POST['price'];
+			$options['description'] = $_POST['description'];
+			$options['authors'] = $_POST['author_id'];  //массив ids выбранных авторов
+			$options['genres'] = $_POST['genre_id'];  //массив ids выбранных жанров
+			$options['is_new'] = $_POST['is_new'];
+			$options['is_recommended'] = $_POST['is_recommended'];
+			$options['status'] = $_POST['status'];
 
-            // При необходимости можно валидировать значения нужным образом
-            if (!isset($options['name']) || empty($options['name'])) {
-                $errors[] = 'Заполните поля';
-            }
+			// Флаг ошибок в форме
+			$errors = false;
 
-            if ($errors == false) {
-                // Если ошибок нет
-                // Добавляем новый товар
-                $id = Product::createProduct($options);
+			// При необходимости можно валидировать значения нужным образом
+			if (!isset($options['code']) || empty($options['code'])) {
+				$errors[] = 'Заполните поле "Код"';
+			}
+			if (!isset($options['name']) || empty($options['name'])) {
+				$errors[] = 'Заполните поле "Название книги"';
+			}
+			if (!isset($options['price']) || empty($options['price'])) {
+				$errors[] = 'Заполните поле "Стоимость"';
+			}
+			if (!isset($options['price']) || empty($options['price'])) {
+				$errors[] = 'Заполните поле "Описание"';
+			}
+			if (!isset($options['genres']) || empty($options['genres'])) {
+				$errors[] = 'Заполните поле "Жанр"';
+			}
+			if (!isset($options['authors']) || empty($options['authors'])) {
+				$errors[] = 'Заполните поле "Автор"';
+			}
 
-                // Если запись добавлена
-                if ($id) {
-                    // Проверим, загружалось ли через форму изображение
-                    if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
-                        // Если загружалось, переместим его в нужную папке, дадим новое имя
-                        move_uploaded_file($_FILES["image"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/upload/images/books/{$id}.jpg");
-                    }
-                };
+			if ($errors == false) {
+				// Если ошибок нет
+				// Добавляем новый товар
+				$id = Book::createBook($options);
 
-                // Перенаправляем пользователя на страницу управлениями товарами
-                header("Location: /admin/book");
-            }
-        }
+				// Если запись добавлена
+				if ($id) {
+					// Проверим, загружалось ли через форму изображение
+					if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
+						// Если загружалось, переместим его в нужную папке, дадим новое имя
+						move_uploaded_file($_FILES["image"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/upload/images/books/{$id}.jpg");
+					}
+				};
+				// Перенаправляем админа на страницу управлениями товарами
+				header("Location: /admin/book");
+			}
+		}
 
-        // Подключаем вид
-        require_once(ROOT . '/views/admin/admin_book/create.php');
-        return true;
-    }
+		// Подключаем вид
+		require_once(ROOT . '/views/admin/admin_book/create.php');
+		return true;
+	}
 
-    /**
-     * Action для страницы "Редактировать товар"
-     */
-    public function actionUpdate($id)
-    {
-        // Проверка доступа
-        self::checkAdmin();
-
-        // Получаем список категорий для выпадающего списка
-        $categoriesList = Genre::getCategoriesListAdmin();
-
-        // Получаем данные о конкретном заказе
-        $product = Product::getProductById($id);
-
-        // Обработка формы
-        if (isset($_POST['submit'])) {
-            // Если форма отправлена
-            // Получаем данные из формы редактирования. При необходимости можно валидировать значения
-            $options['name'] = $_POST['name'];
-            $options['code'] = $_POST['code'];
-            $options['price'] = $_POST['price'];
-            $options['category_id'] = $_POST['category_id'];
-            $options['brand'] = $_POST['brand'];
-            $options['availability'] = $_POST['availability'];
-            $options['description'] = $_POST['description'];
-            $options['is_new'] = $_POST['is_new'];
-            $options['is_recommended'] = $_POST['is_recommended'];
-            $options['status'] = $_POST['status'];
-
-            // Сохраняем изменения
-            if (Product::updateProductById($id, $options)) {
+	/**
+	 * Action для страницы "Редактировать товар"
+	 */
+	public function actionUpdate($id)
+	{
 
 
-                // Если запись сохранена
-                // Проверим, загружалось ли через форму изображение
-                if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
+		// Получаем список категорий для выпадающего списка
+		$categoriesList = Genre::getCategoriesListAdmin();
 
-                    // Если загружалось, переместим его в нужную папке, дадим новое имя
-                   move_uploaded_file($_FILES["image"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/upload/images/books/{$id}.jpg");
-                }
-            }
+		// Получаем данные о конкретном заказе
+		$product = Product::getProductById($id);
 
-            // Перенаправляем пользователя на страницу управлениями товарами
-            header("Location: /admin/book");
-        }
+		// Обработка формы
+		if (isset($_POST['submit'])) {
+			// Если форма отправлена
+			// Получаем данные из формы редактирования. При необходимости можно валидировать значения
+			$options['name'] = $_POST['name'];
+			$options['code'] = $_POST['code'];
+			$options['price'] = $_POST['price'];
+			$options['category_id'] = $_POST['category_id'];
+			$options['brand'] = $_POST['brand'];
+			$options['availability'] = $_POST['availability'];
+			$options['description'] = $_POST['description'];
+			$options['is_new'] = $_POST['is_new'];
+			$options['is_recommended'] = $_POST['is_recommended'];
+			$options['status'] = $_POST['status'];
 
-        // Подключаем вид
-        require_once(ROOT . '/views/admin_book/update.php');
-        return true;
-    }
+			// Сохраняем изменения
+			if (Product::updateProductById($id, $options)) {
 
-    /**
-     * Action для страницы "Удалить товар"
-     */
-    public function actionDelete($id)
-    {
-        // Проверка доступа
-        self::checkAdmin();
 
-        // Обработка формы
-        if (isset($_POST['submit'])) {
-            // Если форма отправлена
-            // Удаляем товар
-            Product::deleteProductById($id);
+				// Если запись сохранена
+				// Проверим, загружалось ли через форму изображение
+				if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
 
-            // Перенаправляем пользователя на страницу управлениями товарами
-            header("Location: /admin/book");
-        }
+					// Если загружалось, переместим его в нужную папке, дадим новое имя
+					move_uploaded_file($_FILES["image"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/upload/images/books/{$id}.jpg");
+				}
+			}
 
-        // Подключаем вид
-        require_once(ROOT . '/views/admin_book/delete.php');
-        return true;
-    }
+			// Перенаправляем пользователя на страницу управлениями товарами
+			header("Location: /admin/book");
+		}
+
+		// Подключаем вид
+		require_once(ROOT . '/views/admin_book/update.php');
+		return true;
+	}
+
+	/**
+	 * Action для страницы "Удалить товар"
+	 */
+	public function actionDelete($id)
+	{
+
+		// Обработка формы
+		if (isset($_POST['submit'])) {
+			// Если форма отправлена
+			// Удаляем товар
+			Book::deleteBookById($id);
+
+			// Перенаправляем пользователя на страницу управлениями товарами
+			header("Location: /admin/book");
+		}
+
+		// Подключаем вид
+		require_once(ROOT . '/views/admin/admin_book/delete.php');
+		return true;
+	}
 
 }

@@ -10,9 +10,12 @@ class Book
 
 	// Количество отображаемых товаров в админпанели
 	const SHOW_FOR_ADMIN = 10;
-#----------------------------Главная страница----------------------------------
 
-	//Возвращает массив последних книг
+	/**
+	 * Возвращает массив с информацей о последних книгах
+	 * @param integer $count <p>Страниц по умолчанию</p>
+	 * @return array $booksList <p>Массив с информацей о последних книгах</p>
+	 */
 	public static function getLatestBooks($count = self::SHOW_BY_DEFAULT)
 	{
 		// Соединение с БД
@@ -58,7 +61,10 @@ LIMIT :count';
 		return $booksList;
 	}
 
-	//Возвращает массив рекомендуемых книг
+	/**
+	 * Возвращает массив с информацей о рекомендуемых книгах
+	 * @return array $sliderBooks <p>Массив с информацей о рекомендуемых книгах</p>
+	 */
 	public static function getRecommendedBooks()
 	{
 		// Соединение с БД
@@ -68,7 +74,8 @@ LIMIT :count';
 		$sql = 'SELECT b_id, b_is_new 
 FROM books   
 WHERE b_is_recommended=1
-GROUP BY b_id';
+GROUP BY b_id
+ORDER BY b_id DESC';
 
 		// Используется подготовленный запрос
 		$result = $db->prepare($sql);
@@ -90,8 +97,11 @@ GROUP BY b_id';
 		return $sliderBooks;
 	}
 
-#----------------------------Страница книги------------------------------------
-	//Возвращает запись книги по id
+	/**
+	 * Возвращает массив с информацей о книге
+	 * @param integer $id <p>id книги</p>
+	 * @return array <p>Массив с информацей о книге</p>
+	 */
 	public static function getBookById($id)
 	{
 		// Соединение с БД
@@ -128,12 +138,14 @@ WHERE b_id = :id';
 		$result->execute();
 
 		// Получение и возврат результатов
-
 		return $result->fetch();
 	}
 
-#----------------------------Страница каталога---------------------------------
-	//Возвращает массив книг страницы в каталоге
+	/**
+	 * Возвращает массив с информацей о книгах на страницу(каталог)
+	 * @param integer $page <p>Страница пагинации</p>
+	 * @return array $booksLimit <p>Массив с информацей о книгах на страницу(каталог)</p>
+	 */
 	public static function getBooksLimit($page = 1)
 	{
 		$limit = Book::SHOW_BY_DEFAULT;
@@ -155,7 +167,7 @@ JOIN m2m_books_authors USING (b_id)
 JOIN authors USING (a_id)
 WHERE b_status=1
 GROUP BY b_id
-ORDER BY b_id ASC
+ORDER BY b_id DESC
 LIMIT :limit 
 OFFSET :offset';
 
@@ -181,7 +193,10 @@ OFFSET :offset';
 		return $booksLimit;
 	}
 
-	//Возвращает  общее число записей в каталоге
+	/**
+	 * Возвращает число строк записей в каталоге
+	 * @return integer  <p>Число строк записей в каталоге</p>
+	 */
 	public static function getCountBooks()
 	{
 		// Соединение с БД
@@ -202,8 +217,12 @@ OFFSET :offset';
 		return $row['count'];
 	}
 
-#----------------------------Страница жанра------------------------------------
-	//Возвращает массив книг страницы в жанре
+	/**
+	 * Возвращает массив с информацей о книгах жанра на страницу
+	 * @param integer $genreId <p>id жанра</p>
+	 * @param integer $page <p>Страница пагинации</p>
+	 * @return array $booksGenre <p>Массив с информацей о книгах жанра на страницу</p>
+	 */
 	public static function getBooksLimitByGenre($genreId, $page = 1)
 	{
 		$limit = Book::SHOW_BY_DEFAULT;
@@ -228,7 +247,7 @@ JOIN m2m_books_genres USING (b_id)
 JOIN genres USING (g_id)
 WHERE b_status=1 and g_id=:genre_id
 GROUP BY b_id
-ORDER BY b_id
+ORDER BY b_id DESC
 LIMIT :limit
 OFFSET :offset';
 
@@ -255,7 +274,11 @@ OFFSET :offset';
 		return $booksGenre;
 	}
 
-	//Возвращает  общее число записей в жанре
+	/**
+	 * Возврвщает число строк записей в каталоге по жанру
+	 * @param integer $genreId <p>id жанра</p>
+	 * @return integer <p>Число строк записей в каталоге по жанру</p>
+	 */
 	public static function getCountBooksInGenre($genreId)
 	{
 		// Соединение с БД
@@ -277,9 +300,12 @@ OFFSET :offset';
 		return $row['count'];
 	}
 
-#----------------------------Страница автора-----------------------------------
-
-	//Возвращает массив книг страницы по автору
+	/**
+	 * Возвращает массив с информацей о книгах автора на страницу
+	 * @param integer $authorId <p>id автора</p>
+	 * @param integer $page <p>Страница пагинации</p>
+	 * @return array $booksAuthor <p>Массив с информацей о книгах автора на страницу</p>
+	 */
 	public static function getBooksLimitByAuthor($authorId, $page = 1)
 	{
 		$limit = Book::SHOW_BY_DEFAULT;
@@ -293,7 +319,7 @@ OFFSET :offset';
 		$idsString = implode(',', self::getBooksIdsByAuthor($authorId));
 
 		// Текст запроса к БД
-			$sql = "SELECT
+		$sql = "SELECT
 			b_id  AS id,
 			b_name  AS name,
 			b_price  AS price,
@@ -305,7 +331,7 @@ OFFSET :offset';
 	JOIN authors USING (a_id)
 	WHERE b_status=1 AND b_id IN (${idsString})
 	GROUP BY b_id 
-	ORDER BY b_id 
+	ORDER BY b_id DESC
 	LIMIT :limit
 	OFFSET :offset";
 
@@ -331,7 +357,11 @@ OFFSET :offset';
 		return $booksAuthor;
 	}
 
-	//Возвращает  общее число записей по автору
+	/**
+	 * Возвращает число строк записей в каталоге по автору
+	 * @param integer $authorId <p>id жанра</p>
+	 * @return integer <p>Число строк записей в каталоге по автору</p>
+	 */
 	public static function getCountBooksByAuthor($authorId)
 	{
 		// Соединение с БД
@@ -353,7 +383,11 @@ OFFSET :offset';
 		return $row['count'];
 	}
 
-	//Возвращает массив ids книг по id автора
+	/**
+	 * Возвращает массив ids книг по id автора
+	 * @param integer $authorId <p>id автора</p>
+	 * @return array $idsArray <p>Массив ids книг по id автора</p>
+	 */
 	public static function getBooksIdsByAuthor($authorId)
 	{
 		// Соединение с БД
@@ -383,14 +417,16 @@ WHERE b_status = 1 AND a_id = :author_id';
 		return $idsArray;
 	}
 
-#-----------------------------------------------------------------------------
-
-   //Возвращает массив всех книг
-	public static function getAllBooksLimit($page=1)
+	/**
+	 * Возвращает массив с информацей о книгах на страницу(админпанель)
+	 * @param integer $page <p>Страница пагинации</p>
+	 * @return array $allBooks <p>Массив с информацей о книгах на страницу(админпанель)</p>
+	 */
+	public static function getAdminBooksLimit($page = 1)
 	{
 		$limit = Book::SHOW_FOR_ADMIN;
 		// Смещение (для запроса)
-		$offset = ($page - 1) * self::SHOW_BY_DEFAULT;
+		$offset = ($page - 1) * self::SHOW_FOR_ADMIN;
 
 		// Соединение с БД
 		$db = Db::getConnection();
@@ -443,9 +479,75 @@ OFFSET :offset';
 		return $allBooks;
 	}
 
+	/**
+	 * Добавляет новую книгу
+	 * @param array $options <p>Массив с информацией о ниге</p>
+	 * @return integer <p>id добавленной в таблицу записи</p>
+	 */
+	public static function createBook($options)
+	{
+		// Соединение с БД
+		$db = Db::getConnection();
 
+		// Текст запроса к БД
+		$sql_1 = 'INSERT INTO books '
+			. '(b_code, b_name, b_price,'
+			. 'b_description, b_is_new, b_is_recommended, b_status)'
+			. 'VALUE                      '
+			. '(:code, :name, :price,'
+			. ':description, :is_new, :is_recommended, :status)';
 
+		// Получение и возврат результатов. Используется подготовленный запрос
+		$result_1 = $db->prepare($sql_1);
+		$result_1->bindParam(':code', $options['code'], PDO::PARAM_STR);
+		$result_1->bindParam(':name', $options['name'], PDO::PARAM_STR);
+		$result_1->bindParam(':price', $options['price'], PDO::PARAM_INT);
+		$result_1->bindParam(':description', $options['description'], PDO::PARAM_STR);
+		$result_1->bindParam(':is_new', $options['is_new'], PDO::PARAM_STR);
+		$result_1->bindParam(':is_recommended', $options['is_recommended'], PDO::PARAM_STR);
+		$result_1->bindParam(':status', $options['status'], PDO::PARAM_INT);
 
+		if ($result_1->execute()) {
+			$book_id = $db->lastInsertId();
+
+			//Запись в таблицу authors
+			foreach ($options['authors'] as $author_id){
+				$sql_2 = 'INSERT INTO m2m_books_authors '
+					. '(a_id, b_id )'
+					. 'VALUE                 '
+					. '(:author_id, :book_id)';
+				// Получение и возврат результатов. Используется подготовленный запрос
+				$result_2 = $db->prepare($sql_2);
+				$result_2->bindParam(':author_id', $author_id, PDO::PARAM_STR);
+				$result_2->bindParam(':book_id', $book_id, PDO::PARAM_STR);
+				$result_2->execute();
+			}
+
+			//Запись в таблицу genres
+			foreach ($options['genres'] as $genre_id) {
+				$sql_3 = 'INSERT INTO m2m_books_genres '
+					. '(g_id, b_id )'
+					. 'VALUE                 '
+					. '(:genre_id, :book_id)';
+				// Получение и возврат результатов. Используется подготовленный запрос
+				$result_3 = $db->prepare($sql_3);
+				$result_3->bindParam(':genre_id', $genre_id, PDO::PARAM_STR);
+				$result_3->bindParam(':book_id', $book_id, PDO::PARAM_STR);
+				$result_3->execute();
+			}
+			// Если запрос выполенен успешно, возвращаем id добавленной книги
+			return $book_id;
+
+		}
+		// Иначе возвращаем 0
+		return 0;
+	}
+
+	/**
+	 * Удаляет книгу
+	 * @param integer $id <p>id книги</p>
+	 * @return boolean <p>Результат удаления</p>
+	 */
 
 	public static function deleteBookById($id)
 	{
@@ -497,41 +599,7 @@ OFFSET :offset';
 		return $result->execute();
 	}
 
-	/**
-	 * Добавляет новый товар
-	 * @param array $options <p>Массив с информацией о товаре</p>
-	 * @return integer <p>id добавленной в таблицу записи</p>
-	 */
-	public static function createBook($options)
-	{
-		// Соединение с БД
-		$db = Db::getConnection();
 
-		// Текст запроса к БД
-		$sql = 'INSERT INTO books '
-			. '(title, price, genre_id,'
-			. 'description, is_new, is_recommended, status)'
-			. 'VALUES
-                                                                                                                 '
-			. '(:title, :price, :genre_id,'
-			. ':description, :is_new, :is_recommended, :status)';
-
-		// Получение и возврат результатов. Используется подготовленный запрос
-		$result = $db->prepare($sql);
-		$result->bindParam(':title', $options['title'], PDO::PARAM_STR);
-		$result->bindParam(':price', $options['price'], PDO::PARAM_STR);
-		$result->bindParam(':genre_id', $options['genre_id'], PDO::PARAM_INT);
-		$result->bindParam(':description', $options['description'], PDO::PARAM_STR);
-		$result->bindParam(':is_new', $options['is_new'], PDO::PARAM_INT);
-		$result->bindParam(':is_recommended', $options['is_recommended'], PDO::PARAM_INT);
-		$result->bindParam(':status', $options['status'], PDO::PARAM_INT);
-		if ($result->execute()) {
-			// Если запрос выполенен успешно, возвращаем id добавленной записи
-			return $db->lastInsertId();
-		}
-		// Иначе возвращаем 0
-		return 0;
-	}
 
 	/**
 	 * Возвращает путь к изображению
