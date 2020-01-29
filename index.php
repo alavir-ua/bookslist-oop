@@ -6,7 +6,7 @@
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 
-session_start();
+//session_start();
 
 // Подключение файлов системы
 define('ROOT', dirname(__FILE__));

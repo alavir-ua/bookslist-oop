@@ -26,8 +26,8 @@
                             <div class="col-sm-6">
                                 <div class="contactinfo">
                                     <ul class="nav nav-pills">
-                                        <li><a href="#"><i class="fa fa-phone"></i> +38 093 490 78 70</a></li>
-                                        <li><a href="#"><i class="fa fa-envelope"></i> alavir.7w@gmail.com</a></li>
+                                        <li><a href="#"><i class="fa fa-phone"></i> +38 077 777 77 77</a></li>
+                                        <li><a href="#"><i class="fa fa-envelope"></i> admin@gmail.com</a></li>
                                     </ul>
                                 </div>
                             </div>

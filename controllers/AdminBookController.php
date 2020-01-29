@@ -156,11 +156,18 @@ class AdminBookController
 
 		// Обработка формы
 		if (isset($_POST['submit'])) {
-			// Если форма отправлена
-			// Удаляем товар
-			Book::deleteBookById($id);
+			//Если форма отправлена удаляем товар
+			$result = Book::deleteBookById($id);
 
-			// Перенаправляем пользователя на страницу управлениями товарами
+			//определяем путь к изображению
+			$img = ROOT . "/upload/images/books/{$id}.jpg";
+
+			//Если книга удалена и сущ.изображение, удаляем его
+			if(file_exists($img) && $result){
+				unlink($img);
+			}
+
+			// Перенаправляем админа на страницу управлениями товарами
 			header("Location: /admin/book");
 		}
 
