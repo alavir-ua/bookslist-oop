@@ -41,7 +41,8 @@
 				<div class="features_items"><!--features_items-->
 					<h2 class="title text-center">Каталог по жанру</h2>
 
-			<?php foreach ($genreBooks as $book): ?>
+					<?php if(count($genreBooks) != 0):?>
+			  <?php foreach ($genreBooks as $book): ?>
 							<div class="col-sm-4">
 								<div class="product-image-wrapper">
 									<div class="single-products">
@@ -60,7 +61,12 @@
 									</div>
 								</div>
 							</div>
-			<?php endforeach; ?>
+			  <?php endforeach; ?>
+					<?php else: ?>
+					<div class="col-sm-4">
+						<h4>В данном жанре книг еще нет</h4>
+					</div>
+					<?php endif; ?>
 
 				</div><!--features_items-->
 

@@ -8,11 +8,11 @@ return array(
 	'catalog/page-([0-9]+)' => 'catalog/index/$1', // actionIndex в CatalogController
 	'catalog' => 'catalog/index', // actionIndex в CatalogController
 
-    //Жанр книг:
+    //Каталог по жанру:
 	'genre/([0-9]+)/page-([0-9]+)' => 'catalog/genre/$1/$2', // actionGenre в CatalogController
 	'genre/([0-9]+)' => 'catalog/genre/$1', // actionGenre в CatalogController
 
-	//Автор книг:
+	//Каталог по автору:
 	'author/([0-9]+)/page-([0-9]+)' => 'catalog/author/$1/$2', // actionAuthor в CatalogController
 	'author/([0-9]+)' => 'catalog/author/$1', // actionAuthor в CatalogController
 
@@ -27,14 +27,12 @@ return array(
 	'admin/book/page-([0-9]+)' => 'adminBook/index/$1', // actionIndex в AdminBookController
     'admin/book' => 'adminBook/index', // actionIndex в AdminBookController
 
+    // Управление жанрами:
+	'admin/genre/update/([0-9]+)' => 'adminGenre/update/$1', //actionUpdate в AdminGenreController
+    'admin/genre/create' => 'adminGenre/create', //actionCreate в AdminGenreController
+    'admin/genre' => 'adminGenre/index', //actionIndex в AdminGenreController
 
 
-
-    // Управление категориями:
-    'admin/genre/create' => 'adminGenre/create',
-    'admin/genre/update/([0-9]+)' => 'adminGenre/update/$1',
-    'admin/genre/delete/([0-9]+)' => 'adminGenre/delete/$1',
-    'admin/genre' => 'adminGenre/index',
 
     // Управление заказами:
     'admin/order/update/([0-9]+)' => 'adminOrder/update/$1',

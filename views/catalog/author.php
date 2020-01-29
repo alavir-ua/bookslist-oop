@@ -41,27 +41,32 @@
 		        <div class="features_items"><!--features_items-->
 			        <h2 class="title text-center">Каталог по автору</h2>
 
+		        <?php if(count($authorBooks) != 0):?>
 		        <?php foreach ($authorBooks as $book): ?>
-					        <div class="col-sm-4">
-						        <div class="product-image-wrapper">
-							        <div class="single-products">
-								        <div class="productinfo text-center">
-									        <img src="<?php echo Book::getImage($book['id']); ?>"
-									             alt=""/>
-									        <h2><?php echo $book['price'] .' '; ?>грн</h2><!--Цена книги-->
-									        <a href="/book/<?php echo $book['id']; ?>"><span>
+				        <div class="col-sm-4">
+					        <div class="product-image-wrapper">
+						        <div class="single-products">
+							        <div class="productinfo text-center">
+								        <img src="<?php echo Book::getImage($book['id']); ?>"
+								             alt=""/>
+								        <h2><?php echo $book['price'] .' '; ?>грн</h2><!--Цена книги-->
+								        <a href="/book/<?php echo $book['id']; ?>"><span>
 																<?php echo $book['name']; ?></span><!--Название книги-->
-									        </a>
-									        <h2><span><?php echo $book['authors']; ?></span></h2><!--Автора книги-->
-								        </div>
-				          <?php if ($book['is_new']): ?>
-										        <img src="/template/images/home/new.png" class="new" alt=""/>
-				          <?php endif; ?>
+								        </a>
+								        <h2><span><?php echo $book['authors']; ?></span></h2><!--Автора книги-->
 							        </div>
+				        <?php if ($book['is_new']): ?>
+									        <img src="/template/images/home/new.png" class="new" alt=""/>
+				        <?php endif; ?>
 						        </div>
 					        </div>
+				        </div>
 		        <?php endforeach; ?>
-
+		        <?php else: ?>
+					        <div class="col-sm-4">
+						        <h4>Книг данного автора еще нет</h4>
+					        </div>
+		        <?php endif; ?>
 		        </div><!--features_items-->
 
 		        <!-- Постраничная навигация -->

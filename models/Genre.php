@@ -7,10 +7,9 @@ class Genre
 {
 
     /**
-     * Возвращает массив категорий для списка на сайте
-     * @return array <p>Массив с категориями</p>
+     * Возвращает массив жанров для списка на сайте
+     * @return array <p>Массив с жанрами</p>
      */
-    #done
     public static function getGenresList()
     {
         // Соединение с БД
@@ -44,35 +43,16 @@ class Genre
         $result = $db->query('SELECT g_id, g_name, g_sort_order, g_status FROM genres ORDER BY g_sort_order ASC');
 
         // Получение и возврат результатов
-        $genresList = array();
         $i = 0;
+	    $genreList = array();
         while ($row = $result->fetch()) {
-            $categoryList[$i]['id'] = $row['id'];
-            $categoryList[$i]['name'] = $row['name'];
-            $categoryList[$i]['sort_order'] = $row['sort_order'];
-            $categoryList[$i]['status'] = $row['status'];
+            $genreList[$i]['id'] = $row['g_id'];
+            $genreList[$i]['name'] = $row['g_name'];
+            $genreList[$i]['sort_order'] = $row['g_sort_order'];
+            $genreList[$i]['status'] = $row['g_status'];
             $i++;
         }
-        return $genresList;
-    }
-
-    /**
-     * Удаляет категорию с заданным id
-     * @param integer $id
-     * @return boolean <p>Результат выполнения метода</p>
-     */
-    public static function deleteGenreById($id)
-    {
-        // Соединение с БД
-        $db = Db::getConnection();
-
-        // Текст запроса к БД
-        $sql = 'DELETE FROM genres WHERE g_id = :id';
-
-        // Получение и возврат результатов. Используется подготовленный запрос
-        $result = $db->prepare($sql);
-        $result->bindParam(':id', $id, PDO::PARAM_INT);
-        return $result->execute();
+        return $genreList;
     }
 
     /**
@@ -83,7 +63,7 @@ class Genre
      * @param integer $status <p>Статус <i>(включено "1", выключено "0")</i></p>
      * @return boolean <p>Результат выполнения метода</p>
      */
-    public static function updateCategoryById($id, $name, $sortOrder, $status)
+    public static function updateGenreById($id, $name, $sortOrder, $status)
     {
         // Соединение с БД
         $db = Db::getConnection();
@@ -110,7 +90,7 @@ class Genre
      * @param integer $id <p>id категории</p>
      * @return array <p>Массив с информацией о категории</p>
      */
-    public static function getCategoryById($id)
+    public static function getGenreById($id)
     {
         // Соединение с БД
         $db = Db::getConnection();

@@ -1,4 +1,4 @@
-<?php include ROOT . '/views/layouts/header.php'; ?>
+<?php include ROOT . '/views/admin/layouts/header.php'; ?>
 
 <section>
     <div class="container">
@@ -8,14 +8,14 @@
 
             <div class="breadcrumbs">
                 <ol class="breadcrumb">
-                    <li><a href="../../../index.php">Админпанель</a></li>
-                    <li><a href="/admin/order">Управление категориями</a></li>
-                    <li class="active">Добавить категорию</li>
+                    <li><a href="/admin">Админпанель</a></li>
+                    <li><a href="/admin/путку">Управление жанрами</a></li>
+                    <li class="active">Добавить жанр</li>
                 </ol>
             </div>
 
 
-            <h4>Добавить новую категорию</h4>
+            <h4>Добавить новый жанр</h4>
 
             <br/>
 
@@ -34,16 +34,16 @@
                         <p>Название</p>
                         <input type="text" name="name" placeholder="" value="">
 
-                        <p>Порядковый номер</p>
+                        <p>Порядок отображения</p>
                         <input type="text" name="sort_order" placeholder="" value="">
 
-                        <p>Статус</p>
+                        <p>Статус отображения</p>
                         <select name="status">
                             <option value="1" selected="selected">Отображается</option>
-                            <option value="0">Скрыта</option>
+                            <option value="0">Скрыт</option>
                         </select>
 
-                        <br><br>
+                        <br><br><br>
 
                         <input type="submit" name="submit" class="btn btn-default" value="Сохранить">
                     </form>
@@ -55,5 +55,5 @@
     </div>
 </section>
 
-<?php include ROOT . '/views/layouts/footer.php'; ?>
+<?php include ROOT . '/views/admin/layouts/footer.php'; ?>
 

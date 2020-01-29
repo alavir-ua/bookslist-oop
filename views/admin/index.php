@@ -16,8 +16,8 @@
 
             <ul>
                 <li><a href="/admin/book">Управление книгами</a></li>
-                <li><a href="/admin/category">Управление жанрами</a></li>
-<!--                <li><a href="/admin/order">Управление заказами</a></li>-->
+                <li><a href="/admin/genre">Управление жанрами</a></li>
+                <li><a href="/admin/author">Управление авторами</a></li>
             </ul>
 
         </div>
