@@ -115,6 +115,8 @@ ORDER BY b_id DESC';
         b_price  AS price,
         b_description  AS description,
         b_is_new  AS is_new,
+        b_status  AS status,
+        b_is_recommended  AS is_recommended,
 		GROUP_CONCAT(DISTINCT a_name ORDER BY a_name)
 		AS authors,
         GROUP_CONCAT(DISTINCT g_name ORDER BY g_name)
@@ -134,7 +136,7 @@ WHERE b_id = :id';
 		// Указываем, что хотим получить данные в виде массива
 		$result->setFetchMode(PDO::FETCH_ASSOC);
 
-		// Выполнение коменды
+		// Выполнение команды
 		$result->execute();
 
 		// Получение и возврат результатов
@@ -598,42 +600,48 @@ OFFSET :offset';
 		$result_1->bindParam(':status', $options['status'], PDO::PARAM_INT);
 
 		if ($result_1->execute()) {
-			// Удаление c связей книги с таблицы authors
-			$sql_2 = 'DELETE FROM m2m_books_authors WHERE b_id = :id';
-			$result_2 = $db->prepare($sql_2);
-			$result_2->bindParam(':id', $id, PDO::PARAM_INT);
-			$result_2->execute();
-
-			// Удаление c связей книги с таблицы genres
-			$sql_3 = 'DELETE FROM m2m_books_genres WHERE b_id = :id';
-			$result_3 = $db->prepare($sql_3);
-			$result_3->bindParam(':id', $id, PDO::PARAM_INT);
-			$result_3->execute();
-
-			//Запись в таблицу authors
-			foreach ($options['authors'] as $author_id) {
-				$sql_2 = 'INSERT INTO m2m_books_authors '
-					. '(a_id, b_id )'
-					. 'VALUE                 '
-					. '(:author_id, :book_id)';
-				// Получение и возврат результатов. Используется подготовленный запрос
+			//Если авторы менялись
+			if (isset($options['authors']) || !empty($options['authors'])) {
+				// Удаление c связей книги с таблицы authors
+				$sql_2 = 'DELETE FROM m2m_books_authors WHERE b_id = :id';
 				$result_2 = $db->prepare($sql_2);
-				$result_2->bindParam(':author_id', $author_id, PDO::PARAM_STR);
-				$result_2->bindParam(':book_id', $id, PDO::PARAM_STR);
+				$result_2->bindParam(':id', $id, PDO::PARAM_INT);
 				$result_2->execute();
+
+				//Запись в таблицу authors
+				foreach ($options['authors'] as $author_id) {
+					$sql_2 = 'INSERT INTO m2m_books_authors '
+						. '(a_id, b_id )'
+						. 'VALUE                 '
+						. '(:author_id, :book_id)';
+					// Получение и возврат результатов. Используется подготовленный запрос
+					$result_2 = $db->prepare($sql_2);
+					$result_2->bindParam(':author_id', $author_id, PDO::PARAM_STR);
+					$result_2->bindParam(':book_id', $id, PDO::PARAM_STR);
+					$result_2->execute();
+				}
 			}
 
-			//Запись в таблицу genres
-			foreach ($options['genres'] as $genre_id) {
-				$sql_3 = 'INSERT INTO m2m_books_genres '
-					. '(g_id, b_id )'
-					. 'VALUE                 '
-					. '(:genre_id, :book_id)';
-				// Получение и возврат результатов. Используется подготовленный запрос
+			//Если жанры менялись
+			if (isset($options['genres']) || !empty($options['genres'])) {
+				// Удаление c связей книги с таблицы genres
+				$sql_3 = 'DELETE FROM m2m_books_genres WHERE b_id = :id';
 				$result_3 = $db->prepare($sql_3);
-				$result_3->bindParam(':genre_id', $genre_id, PDO::PARAM_STR);
-				$result_3->bindParam(':book_id', $id, PDO::PARAM_STR);
+				$result_3->bindParam(':id', $id, PDO::PARAM_INT);
 				$result_3->execute();
+
+				//Запись в таблицу genres
+				foreach ($options['genres'] as $genre_id) {
+					$sql_3 = 'INSERT INTO m2m_books_genres '
+						. '(g_id, b_id )'
+						. 'VALUE                 '
+						. '(:genre_id, :book_id)';
+					// Получение и возврат результатов. Используется подготовленный запрос
+					$result_3 = $db->prepare($sql_3);
+					$result_3->bindParam(':genre_id', $genre_id, PDO::PARAM_STR);
+					$result_3->bindParam(':book_id', $id, PDO::PARAM_STR);
+					$result_3->execute();
+				}
 			}
 			// Если запрос выполенен успешно, true
 			return true;
@@ -642,14 +650,11 @@ OFFSET :offset';
 		return 0;
 	}
 
-
-
 	/**
 	 * Возвращает путь к изображению
 	 * @param integer $id
 	 * @return string <p>Путь к изображению</p>
 	 */
-	#done
 	public static function getImage($id)
 	{
 		// Название изображения-пустышки
@@ -671,4 +676,21 @@ OFFSET :offset';
 		return $path . $noImage;
 	}
 
+	/**
+	 * Возвращает текстое пояснение статуса для книги :<br/>
+	 * <i>0 - Скрыта, 1 - Отображается</i>
+	 * @param integer $status <p>Статус</p>
+	 * @return string <p>Текстовое пояснение</p>
+	 */
+	public static function getStatusText($status)
+	{
+		switch ($status) {
+			case '1':
+				return 'Да';
+				break;
+			case '0':
+				return 'Нет';
+				break;
+		}
+	}
 }

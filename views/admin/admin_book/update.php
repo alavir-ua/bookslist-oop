@@ -73,26 +73,37 @@
 
 				                    <p>Новинка</p>
 				                    <select name="is_new">
-					                    <option value="1" selected="selected">Да</option>
-					                    <option value="0">Нет</option>
+					                    <option value="1" <?php if ($book['is_new'] == 1) echo ' selected="selected"';
+		                      ?>>Да
+					                    </option>
+					                    <option value="0" <?php if ($book['is_new'] == 0) echo ' selected="selected"';
+		                      ?>>Нет
+					                    </option>
 				                    </select>
 
 				                    <br/><br/>
 
 				                    <p>Рекомендуемая</p>
 				                    <select name="is_recommended">
-					                    <option value="1" selected="selected">Да</option>
-					                    <option value="0">Нет</option>
+					                    <option value="1" <?php if ($book['is_recommended'] == 1) echo ' selected="selected"';
+		                      ?>>Да
+					                    </option>
+					                    <option value="0" <?php if ($book['is_recommended'] == 0) echo ' selected="selected"';
+		                      ?>>Нет
+					                    </option>
 				                    </select>
 
 				                    <br/><br/>
 
-				                    <p>Статус</p>
+				                    <p>Статус отображения</p>
 				                    <select name="status">
-					                    <option value="1" selected="selected">Отображается</option>
-					                    <option value="0">Скрыта</option>
+					                    <option value="1" <?php if ($book['status'] == 1) echo ' selected="selected"';
+		                      ?>>Да
+					                    </option>
+					                    <option value="0" <?php if ($book['status'] == 0) echo ' selected="selected"';
+		                      ?>>Нет
+					                    </option>
 				                    </select>
-
 				                    <br/><br/>
 			                    </div>
 		                    </div>

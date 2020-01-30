@@ -45,11 +45,20 @@ class AdminBookController
 			$options['name'] = $_POST['name'];
 			$options['price'] = $_POST['price'];
 			$options['description'] = $_POST['description'];
-			$options['authors'] = $_POST['author_id'];  //массив ids выбранных авторов
-			$options['genres'] = $_POST['genre_id'];  //массив ids выбранных жанров
 			$options['is_new'] = $_POST['is_new'];
 			$options['is_recommended'] = $_POST['is_recommended'];
 			$options['status'] = $_POST['status'];
+			if (isset($_POST['author_id']) || !empty($_POST['author_id'])) {
+				$options['authors'] = $_POST['author_id'];  //массив ids выбранных авторов
+			} else {
+				$options['authors'] = false;
+			}
+			if (isset($_POST['genre_id']) || !empty($_POST['genre_id'])) {
+				$options['genres'] = $_POST['genre_id'];  //массив ids выбранных жанров
+			} else {
+				$options['genres'] = false;
+			}
+
 
 			// Флаг ошибок в форме
 			$errors = false;
@@ -68,15 +77,16 @@ class AdminBookController
 				$errors[] = 'Заполните поле "Описание"';
 			}
 			if (!isset($options['genres']) || empty($options['genres'])) {
+				$options['genres'] = false;
 				$errors[] = 'Заполните поле "Жанр"';
 			}
 			if (!isset($options['authors']) || empty($options['authors'])) {
+				$options['authors'] = false;
 				$errors[] = 'Заполните поле "Автор"';
 			}
 
 			if ($errors == false) {
-				// Если ошибок нет
-				// Добавляем новый товар
+				// Если ошибок нет то обавляем новую книгу
 				$id = Book::createBook($options);
 
 				// Если запись добавлена
@@ -127,8 +137,7 @@ class AdminBookController
 			// Сохраняем изменения
 			if (Book::updateBookById($id, $options)) {
 
-				// Если запись изменена
-				// Проверим, загружалось ли через форму изображение
+				// Если запись изменена проверим, загружалось ли через форму изображение
 				if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
 
 					//Определяем путь к прежнему изображению

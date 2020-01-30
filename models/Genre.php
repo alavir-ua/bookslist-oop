@@ -40,7 +40,7 @@ class Genre
         $db = Db::getConnection();
 
         // Запрос к БД
-        $result = $db->query('SELECT g_id, g_name, g_sort_order, g_status FROM genres ORDER BY g_sort_order ASC');
+        $result = $db->query('SELECT g_id, g_name, g_status FROM genres ORDER BY g_id ASC');
 
         // Получение и возврат результатов
         $i = 0;
@@ -48,12 +48,38 @@ class Genre
         while ($row = $result->fetch()) {
             $genreList[$i]['id'] = $row['g_id'];
             $genreList[$i]['name'] = $row['g_name'];
-            $genreList[$i]['sort_order'] = $row['g_sort_order'];
             $genreList[$i]['status'] = $row['g_status'];
             $i++;
         }
         return $genreList;
     }
+
+	/**
+	 * Возвращает категорию с указанным id
+	 * @param integer $id <p>id категории</p>
+	 * @return array <p>Массив с информацией о категории</p>
+	 */
+	public static function getGenreById($id)
+	{
+		// Соединение с БД
+		$db = Db::getConnection();
+
+		// Текст запроса к БД
+		$sql = 'SELECT * FROM genres WHERE g_id = :id';
+
+		// Используется подготовленный запрос
+		$result = $db->prepare($sql);
+		$result->bindParam(':id', $id, PDO::PARAM_INT);
+
+		// Указываем, что хотим получить данные в виде массива
+		$result->setFetchMode(PDO::FETCH_ASSOC);
+
+		// Выполняем запрос
+		$result->execute();
+
+		// Возвращаем данные
+		return $result->fetch();
+	}
 
     /**
      * Редактирование категории с заданным id
@@ -63,7 +89,7 @@ class Genre
      * @param integer $status <p>Статус <i>(включено "1", выключено "0")</i></p>
      * @return boolean <p>Результат выполнения метода</p>
      */
-    public static function updateGenreById($id, $name, $sortOrder, $status)
+    public static function updateGenreById($id, $name, $status)
     {
         // Соединение с БД
         $db = Db::getConnection();
@@ -72,7 +98,6 @@ class Genre
         $sql = "UPDATE genres
             SET 
                 g_name = :name, 
-                g_sort_order = :sort_order, 
                 g_status = :status
             WHERE g_id = :id";
 
@@ -80,41 +105,36 @@ class Genre
         $result = $db->prepare($sql);
         $result->bindParam(':id', $id, PDO::PARAM_INT);
         $result->bindParam(':name', $name, PDO::PARAM_STR);
-        $result->bindParam(':sort_order', $sortOrder, PDO::PARAM_INT);
         $result->bindParam(':status', $status, PDO::PARAM_INT);
         return $result->execute();
     }
 
-    /**
-     * Возвращает категорию с указанным id
-     * @param integer $id <p>id категории</p>
-     * @return array <p>Массив с информацией о категории</p>
-     */
-    public static function getGenreById($id)
-    {
-        // Соединение с БД
-        $db = Db::getConnection();
+	/**
+	 * Добавляет новую категорию
+	 * @param string $name <p>Название</p>
+	 * @param integer $sortOrder <p>Порядковый номер</p>
+	 * @param integer $status <p>Статус <i>(включено "1", выключено "0")</i></p>
+	 * @return boolean <p>Результат добавления записи в таблицу</p>
+	 */
+	public static function createGenre($name, $status)
+	{
+		// Соединение с БД
+		$db = Db::getConnection();
 
-        // Текст запроса к БД
-        $sql = 'SELECT * FROM genres WHERE g_id = :id';
+		// Текст запроса к БД
+		$sql = 'INSERT INTO genres (g_name, g_status) '
+			. 'VALUES (:name, :status)';
 
-        // Используется подготовленный запрос
-        $result = $db->prepare($sql);
-        $result->bindParam(':id', $id, PDO::PARAM_INT);
-
-        // Указываем, что хотим получить данные в виде массива
-        $result->setFetchMode(PDO::FETCH_ASSOC);
-
-        // Выполняем запрос
-        $result->execute();
-
-        // Возвращаем данные
-        return $result->fetch();
-    }
+		// Получение и возврат результатов. Используется подготовленный запрос
+		$result = $db->prepare($sql);
+		$result->bindParam(':name', $name, PDO::PARAM_STR);
+		$result->bindParam(':status', $status, PDO::PARAM_INT);
+		return $result->execute();
+	}
 
     /**
-     * Возвращает текстое пояснение статуса для категории :<br/>
-     * <i>0 - Скрыта, 1 - Отображается</i>
+     * Возвращает текстое пояснение статуса для жанра :<br/>
+     * <i>0 - Скрыт, 1 - Отображается</i>
      * @param integer $status <p>Статус</p>
      * @return string <p>Текстовое пояснение</p>
      */
@@ -125,33 +145,9 @@ class Genre
                 return 'Отображается';
                 break;
             case '0':
-                return 'Скрыта';
+                return 'Скрыт';
                 break;
         }
-    }
-
-    /**
-     * Добавляет новую категорию
-     * @param string $name <p>Название</p>
-     * @param integer $sortOrder <p>Порядковый номер</p>
-     * @param integer $status <p>Статус <i>(включено "1", выключено "0")</i></p>
-     * @return boolean <p>Результат добавления записи в таблицу</p>
-     */
-    public static function createGenre($name, $sortOrder, $status)
-    {
-        // Соединение с БД
-        $db = Db::getConnection();
-
-        // Текст запроса к БД
-        $sql = 'INSERT INTO genres (g_name, g_sort_order, g_status) '
-                . 'VALUES (:name, :sort_order, :status)';
-
-        // Получение и возврат результатов. Используется подготовленный запрос
-        $result = $db->prepare($sql);
-        $result->bindParam(':name', $name, PDO::PARAM_STR);
-        $result->bindParam(':sort_order', $sortOrder, PDO::PARAM_INT);
-        $result->bindParam(':status', $status, PDO::PARAM_INT);
-        return $result->execute();
     }
 
 }

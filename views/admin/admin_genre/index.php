@@ -23,21 +23,16 @@
 				<tr>
 					<th>ID</th>
 					<th>Название</th>
-					<th>Порядок отображения</th>
 					<th>Статус отображения</th>
-					<th></th>
 					<th></th>
 				</tr>
 		  <?php foreach ($genresList as $genre): ?>
 						<tr>
 							<td><?php echo $genre['id']; ?></td>
 							<td><?php echo $genre['name']; ?></td>
-							<td><?php echo $genre['sort_order']; ?></td>
 							<td><?php echo Genre::getStatusText($genre['status']); ?></td>
 							<td><a href="/admin/genre/update/<?php echo $genre['id']; ?>" title="Редактировать"><i
 											class="fa fa-pencil-square-o"></i></a></td>
-							<td><a href="/admin/category/delete/<?php echo $genre['id']; ?>" title="Удалить"><i
-											class="fa fa-times"></i></a></td>
 						</tr>
 		  <?php endforeach; ?>
 			</table>
