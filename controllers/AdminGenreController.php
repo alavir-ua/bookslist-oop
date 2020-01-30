@@ -31,7 +31,7 @@ class AdminGenreController
 			// Если форма отправлена получаем данные из формы
 			$name = $_POST['name'];
 			$status = $_POST['status'];
-			echo $name, $status;
+
 			// Флаг ошибок в форме
 			$errors = false;
 
@@ -44,7 +44,7 @@ class AdminGenreController
 				// Если ошибок нет добавляем новый жанр
 				Genre::createGenre($name, $status);
 
-				// Перенаправляем пользователя на страницу управлениями категориями
+				// Перенаправляем пользователя на страницу управления жанрами
 				header("Location: /admin/genre");
 			}
 		}
@@ -69,13 +69,11 @@ class AdminGenreController
 			// Сохраняем изменения
 			Genre::updateGenreById($id, $name, $status);
 
-			// Перенаправляем пользователя на страницу управлениями категориями
+			// Перенаправляем админа на страницу управлениями жанрами
 			header("Location: /admin/genre");
 		}
-
 		// Подключаем вид
 		require_once(ROOT . '/views/admin/admin_genre/update.php');
 		return true;
 	}
-
 }

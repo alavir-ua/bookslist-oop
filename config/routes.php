@@ -18,7 +18,6 @@ return array(
 
 	//Заказ:
 	'order/([0-9]+)' => 'order/index/$1', // actionIndex в OrderController
-	'order/checkout' => 'order/checkout', // actionCheckout в OrderController
 
     // Управление книгами:
     'admin/book/create' => 'adminBook/create', // actionCreate в AdminBookController
@@ -32,22 +31,18 @@ return array(
     'admin/genre/create' => 'adminGenre/create', //actionCreate в AdminGenreController
     'admin/genre' => 'adminGenre/index', //actionIndex в AdminGenreController
 
-
-
-    // Управление заказами:
-    'admin/order/update/([0-9]+)' => 'adminOrder/update/$1',
-    'admin/order/delete/([0-9]+)' => 'adminOrder/delete/$1',
-    'admin/order/view/([0-9]+)' => 'adminOrder/view/$1',
-    'admin/order' => 'adminOrder/index',
+	// Управление авторами:
+	'admin/author/create' => 'adminAuthor/create', //actionCreate в AdminAuthorController
+	'admin/author' => 'adminAuthor/index', //actionIndex в AdminAuthorController
 
     // Админпанель:
-    'admin' => 'admin/index',
+    'admin' => 'admin/index', // actionIndex в SiteController
+
     // О магазине
+    'contacts' => 'site/contact', // actionContact в SiteController
+    'about' => 'site/about', // actionAbout в SiteController
 
-    'contacts' => 'site/contact',
-    'about' => 'site/about',
     // Главная страница
-
     'index.php' => 'site/index', // actionIndex в SiteController
     '' => 'site/index', // actionIndex в SiteController
 );

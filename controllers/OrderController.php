@@ -18,91 +18,56 @@ class OrderController
 		// Список авторов для левого меню
 		$authors = Author::getAuthorsList();
 
-		// Добавляем товар в корзину
+		//Получаем данные заказываемой книги
 		$book = Book::getBookById($id);
-
-       //Статус успешнной отправки письма админу
-		$result = false;
-
-		// Подключаем вид
-		require_once(ROOT . '/views/order/index.php');
-		return true;
-	}
-
-	/**
-	 * Action для страницы "Оформление покупки"
-	 */
-	public function actionCheckout()
-	{
-        // Список жанров для левого меню
-		$genres = Genre::getGenresList();
-
-		// Список авторов для левого меню
-		$authors = Author::getAuthorsList();
 
 		// Статус успешного оформления заказа
 		$result = false;
-
-		function test_input($data)
-		{
-			$data = trim($data);
-			$data = stripslashes($data);
-			$data = htmlspecialchars($data);
-			return $data;
-		}
 
 		// Обработка формы
 		if (isset($_POST['submit'])) {
 
 			// Если форма отправлена, получаем данные из формы
-			$bookCode = $_POST['book_code'];
-			$bookQuantity = test_input($_POST['book_quant']);
-			$userAddress = test_input($_POST['address']);
-			$userFullName = test_input($_POST['full_name']);
-			$bookName = $_POST['book_name'];
-			$bookPrice = $_POST['book_price'];
+			$order['code'] = $_POST['book_code'];
+			$order['quantity'] = $_POST['book_quant'];
+			$order['address'] = $_POST['address'];
+			$order['user_name'] = $_POST['full_name'];
+			$order['book_name'] = $_POST['book_name'];
+			$order['book_price'] = $_POST['book_price'];
 
 			// Флаг ошибок
 			$errors = false;
 
-			//Параметры заказа в email
-			$order['code'] = $bookCode;
-			$order['quantity'] = $bookQuantity;
-			$order['address'] = $userAddress;
-			$order['user_name'] = $userFullName;
-			$order['book_name'] = $bookName;
-			$order['book_price'] = $bookPrice;
 			if (!isset($order['quantity']) || empty($order['quantity'])) {
-				$order['amount'] = 0;
+				$order['amount'] = false;
 			} else {
-				$order['amount'] = $bookPrice * $bookQuantity;
+				$order['amount'] = $order['book_price'] * $order['quantity'];
 
 			}
 
 			// При необходимости можно валидировать значения нужным образом
-            if (!isset($order['address']) || empty($order['address'])) {
-	            $errors[] = 'Заполните поле "Ваш адресс"';
-            }
-	        if (!isset($order['user_name']) || empty($order['user_name'])) {
-		        $errors[] = 'Заполните поле "Ваше ФИО"';
-	        }
-	        if (!isset($order['quantity']) || empty($order['quantity'])) {
-		        $errors[] = 'Заполните поле "Количество экземпляров"';
-	        }
+			if (!isset($order['address']) || empty($order['address'])) {
+				$errors[] = 'Заполните поле "Ваш адресс"';
+			}
+			if (!isset($order['user_name']) || empty($order['user_name'])) {
+				$errors[] = 'Заполните поле "Ваше ФИО"';
+			}
+			if (!isset($order['quantity']) || empty($order['quantity'])) {
+				$errors[] = 'Заполните поле "Количество экземпляров"';
+			}
 
 			if ($errors == false) {
 				$result = true;
 				if($result){
-					Mail::sendMail($order);
+					Mail::sendOrder($order);
 				}
 			} else {
-				$book['name'] = $bookName;
-				$book['code'] = $bookCode;
-				$book['price'] = $bookPrice;
+				$book['name'] = $_POST['book_name'];
+				$book['code'] = $_POST['book_code'];
+				$book['price'] = $_POST['book_price'];
 			}
 		}
 		require_once(ROOT . '/views/order/index.php');
 		return true;
 	}
-
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Класс Genre - модель для работы с категориями товаров
+ * Класс Genre - модель для работы с жанром книги
  */
 class Genre
 {
@@ -30,9 +30,9 @@ class Genre
     }
 
     /**
-     * Возвращает массив категорий для списка в админпанели <br/>
-     * (при этом в результат попадают и включенные и выключенные категории)
-     * @return array <p>Массив категорий</p>
+     * Возвращает массив жанров для списка в админпанели <br/>
+     * (при этом в результат попадают и включенные и выключенные жанры)
+     * @return array $genreList <p>Массив жанров</p>
      */
     public static function getGenresListAdmin()
     {
@@ -55,9 +55,9 @@ class Genre
     }
 
 	/**
-	 * Возвращает категорию с указанным id
-	 * @param integer $id <p>id категории</p>
-	 * @return array <p>Массив с информацией о категории</p>
+	 * Возвращает жанр с указанным id
+	 * @param integer $id <p>id жанра</p>
+	 * @return array <p>Массив с информацией о жанре</p>
 	 */
 	public static function getGenreById($id)
 	{
@@ -82,10 +82,9 @@ class Genre
 	}
 
     /**
-     * Редактирование категории с заданным id
-     * @param integer $id <p>id категории</p>
+     * Редактирование жанра с заданным id
+     * @param integer $id <p>id жанра</p>
      * @param string $name <p>Название</p>
-     * @param integer $sortOrder <p>Порядковый номер</p>
      * @param integer $status <p>Статус <i>(включено "1", выключено "0")</i></p>
      * @return boolean <p>Результат выполнения метода</p>
      */
@@ -110,9 +109,8 @@ class Genre
     }
 
 	/**
-	 * Добавляет новую категорию
+	 * Добавляет новый жанр
 	 * @param string $name <p>Название</p>
-	 * @param integer $sortOrder <p>Порядковый номер</p>
 	 * @param integer $status <p>Статус <i>(включено "1", выключено "0")</i></p>
 	 * @return boolean <p>Результат добавления записи в таблицу</p>
 	 */
@@ -149,5 +147,4 @@ class Genre
                 break;
         }
     }
-
 }

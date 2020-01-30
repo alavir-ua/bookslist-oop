@@ -47,7 +47,7 @@
                         <div class="col-sm-8">
                             <div class="product-information"><!--/product-information-->
                                 <?php if ($book['is_new']): ?>
-                                    <img src="/template/images/product-details/new.jpg" class="newarrival" alt="" />
+                                    <img src="/template/images/book-details/new.jpg" class="newarrival" alt="" />
                                 <?php endif; ?>
                                 <h2><?php echo $book['name']; ?></h2>
 <!--                                <p>Код товара: --><?php //echo $product['code']; ?><!--</p>-->

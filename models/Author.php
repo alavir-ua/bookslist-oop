@@ -6,7 +6,7 @@
 class Author
 {
 	/**
-	 * Возвращает массив авторов книг на сайте на сайте
+	 * Возвращает массив авторов книг на сайте
 	 * @return array <p>Массив с авторами</p>
 	 */
 	public static function getAuthorsList()
@@ -16,8 +16,7 @@ class Author
 
 		// Запрос к БД
 		$result = $db->query('SELECT a_id, a_name FROM authors  GROUP BY a_id
-ORDER BY a_id DESC ');
-
+ORDER BY a_id ASC ');
 
 		// Получение и возврат результатов
 		$i = 0;
@@ -28,6 +27,26 @@ ORDER BY a_id DESC ');
 			$i++;
 		}
 		return $authorsList;
+	}
+
+	/**
+	 * Добавляет нового автора
+	 * @param string $name <p>Имя</p>
+	 * @return boolean <p>Результат добавления записи в таблицу</p>
+	 */
+	public static function createAuthor($name)
+	{
+		// Соединение с БД
+		$db = Db::getConnection();
+
+		// Текст запроса к БД
+		$sql = 'INSERT INTO authors (a_name) '
+			. 'VALUES (:name)';
+
+		// Получение и возврат результатов. Используется подготовленный запрос
+		$result = $db->prepare($sql);
+		$result->bindParam(':name', $name, PDO::PARAM_STR);
+		return $result->execute();
 	}
 }
 

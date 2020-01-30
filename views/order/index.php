@@ -41,7 +41,7 @@
 			<h2 class="title text-center">ОФОРМЛЕНИЕ ЗАКАЗА</h2>
 
 		<?php if ($result): ?>
-					<h3>Заказ успешно оформлен.</h3>
+					<h3>Заказ успешно оформлен</h3>
 		<?php else: ?>
 
 			<?php if (!$result): ?>
@@ -58,7 +58,7 @@
 							<p>Для оформления заказа заполните форму. Наш менеджер свяжется с Вами.</p>
 
 							<div class="login-form">
-								<form action="/order/checkout" method="post">
+								<form action="#" method="post">
 									<p>Название книги</p>
 									<input type="text" name="book_name" placeholder="<?php echo $book['name']; ?>" value="<?php echo $book['name']; ?>" readonly>
 									<p>Код книги</p>
@@ -73,7 +73,7 @@
 									<input type="number" name="book_quant" placeholder="">
 									<br/>
 									<br/>
-									<input type="submit" name="submit" class="btn btn-default" value="Оформить" />
+									<input type="submit" name="submit" class="btn btn-default checkout" value="Оформить" />
 								</form>
 							</div>
 						</div>

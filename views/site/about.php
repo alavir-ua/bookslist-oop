@@ -1,33 +1,24 @@
 <?php include ROOT . '/views/layouts/header.php'; ?>
 
-<section>
-    <div class="container">
-        <div class="row">
+	<section>
+		<div class="container">
+			<div class="row">
 
-            <div class="col-lg-6">
-                <h4>Информация о магазине</h4>
+				<div class="col-lg-6">
+					<h4>Информация о магазине</h4>
 
-                <br/>
+					<br/>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac 
-                    lorem sit amet erat venenatis porta. Pellentesque ultricies 
-                    neque nec eros fringilla, vitae euismod massa posuere. Nullam 
-                    volutpat, nisl efficitur convallis bibendum, turpis nunc 
-                    ullamcorper metus, a iaculis sapien sem a est. Maecenas ac 
-                    vestibulum ex. Nullam interdum quis mi ut venenatis. </p>
+					<p>Наш книжный магазин — бесспорный лидер рынка дистанционных продаж в Украине. Наша компания
+						заботится о том, чтобы ваш досуг был интересным, полезным и разнообразным. Приобретайте наши книги и товары
+						в фирменных магазинах по всей Украине или заказывайте доставку курьером, на почтовое отделение или отделение
+						«Новой Почты».
 
-                <p>Phasellus iaculis purus elementum felis varius, vel viverra massa 
-                    tincidunt. Aliquam vulputate dictum luctus. Aenean lectus 
-                    risus, pellentesque eget lectus eu, sodales fringilla magna. 
-                    Nunc diam mi, dictum ac est non, molestie eleifend ligula.
-                    Nam pharetra vulputate lectus. Duis non quam in est interdum 
-                    pellentesque condimentum a elit. Praesent eget turpis euismod, 
-                    maximus lectus sed, elementum mi. Nulla enim tortor, malesuada 
-                    suscipit finibus at, eleifend eget urna. Mauris laoreet metus 
-                    a nisl bibendum, nec maximus urna molestie.</p>
-            </div>
-        </div>
-    </div>
-</section>
+						Более 1 000 000 миллиона семей в Украине пользуются выгодами, которые предоставляет магазин. Если Вы еще
+						не с нами — присоединяйтесь!</p>
+				</div>
+			</div>
+		</div>
+	</section>
 
 <?php include ROOT . '/views/layouts/footer.php'; ?>
