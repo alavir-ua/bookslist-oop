@@ -2,12 +2,12 @@
 
 /**
  * Контроллер AdminBookController
- * Управление товарами в админпанели
+ * Управление книгами в админпанели
  */
 class AdminBookController
 {
 	/**
-	 * Action для страницы "Управление товарами"
+	 * Action для страницы "Управление книгами"
 	 */
 	public function actionIndex($page = 1)
 	{

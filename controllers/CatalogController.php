@@ -2,7 +2,7 @@
 
 /**
  * Контроллер CatalogController
- * Каталог товаров
+ * Каталог книг
  */
 class CatalogController
 {

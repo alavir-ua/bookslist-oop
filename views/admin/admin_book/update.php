@@ -36,7 +36,7 @@
 				                    <br/>
 
 				                    <p>Жанр</p>
-				                    <input type="text" placeholder="<?php echo $book['genres']; ?>">
+				                    <input type="text" placeholder="<?php echo $book['genres']; ?>" readonly>
 				                    <select name="genre_id[]" size="3" multiple="multiple">
 			                    <?php if (is_array($genres)): ?>
 				                    <?php foreach ($genres as $genre): ?>
@@ -47,7 +47,7 @@
 				                    <br/><br/>
 
 				                    <p>Автор</p>
-				                    <input type="text" placeholder="<?php echo $book['authors']; ?>">
+				                    <input type="text" placeholder="<?php echo $book['authors']; ?>" readonly>
 				                    <select name="author_id[]" size="5" multiple="multiple">
 			                    <?php if (is_array($authors)): ?>
 				                    <?php foreach ($authors as $author): ?>

@@ -2,7 +2,7 @@
 
 /**
  * Контроллер OrderController
- * Корзина
+ * Заказ
  */
 
 class OrderController

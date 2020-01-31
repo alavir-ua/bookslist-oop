@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Контроллер ProductController
+ * Контроллер BookController
  * книга
  */
 class BookController

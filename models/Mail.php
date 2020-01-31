@@ -28,12 +28,12 @@ class Mail
 		$mail->SMTPDebug = 0;
 		$mail->Host = $params['host'];
 		$mail->SMTPAuth = true;
-		$mail->Username = $params['username'];
+		$mail->Username = $params['smtp_name'];
 		$mail->Password = $params['password'];
 		$mail->SMTPSecure = $params['secure'];
 		$mail->Port = $params['port'];
-		$mail->setFrom('alavir.7w@gmail.com'); // Email магазина
-		$mail->addAddress('alehan07@ukr.net'); // Email админа
+		$mail->setFrom($params['smtp_name']); // Email магазина
+		$mail->addAddress($params['admin_mail']); // Email админа
 
         // Письмо
 		$mail->isHTML(true);
@@ -72,12 +72,12 @@ class Mail
 		$mail->SMTPDebug = 0;
 		$mail->Host = $params['host'];
 		$mail->SMTPAuth = true;
-		$mail->Username = $params['username'];
+		$mail->Username = $params['smtp_name'];
 		$mail->Password = $params['password'];
 		$mail->SMTPSecure = $params['secure'];
 		$mail->Port = $params['port'];
-		$mail->setFrom('alavir.7w@gmail.com'); // Email магазина
-		$mail->addAddress('alehan07@ukr.net'); // Email админа
+		$mail->setFrom($params['smtp_name']); // Email магазина
+		$mail->addAddress($params['admin_mail']); // Email админа
 
 		// Письмо
 		$mail->isHTML(true);
